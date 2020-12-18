@@ -40,6 +40,7 @@ public final class FakeFakeUnleash implements Unleash {
 
     @Override
     public Variant getVariant(String toggleName, UnleashContext context, Variant defaultValue) {
+
         return getVariant(toggleName, defaultValue);
     }
 
@@ -50,10 +51,14 @@ public final class FakeFakeUnleash implements Unleash {
 
     @Override
     public Variant getVariant(String toggleName, Variant defaultValue) {
-        if(isEnabled(toggleName) && variants.containsKey(toggleName)) {
-            return variants.get(toggleName);
+        if (variants.containsKey(toggleName)) {
+            return variants.get((toggleName));
+        } else if (enableAll) {
+            return new Variant("enabled", (String) null, true);
+        } else if (disableAll) {
+            return Variant.DISABLED_VARIANT;
         } else {
-            return defaultValue;
+            return  defaultValue;
         }
     }
 

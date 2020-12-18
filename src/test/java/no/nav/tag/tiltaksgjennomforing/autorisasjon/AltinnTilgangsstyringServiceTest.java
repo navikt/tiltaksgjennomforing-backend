@@ -1,5 +1,6 @@
 package no.nav.tag.tiltaksgjennomforing.autorisasjon;
 
+import no.finn.unleash.Variant;
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.AltinnReportee;
 import no.nav.tag.tiltaksgjennomforing.Miljø;
 import no.nav.tag.tiltaksgjennomforing.autorisasjon.altinntilgangsstyring.AltinnTilgangsstyringProperties;
@@ -45,7 +46,7 @@ public class AltinnTilgangsstyringServiceTest {
     @Before
     public void setUp() {
         when(tokenUtils.hentSelvbetjeningToken()).thenReturn("token");
-        when(featureToggleService.isEnabled(anyString())).thenReturn(false);
+        when(featureToggleService.getVariant(anyString())).thenReturn(new Variant("disabled", (String) null, false));
     }
 
     @Test

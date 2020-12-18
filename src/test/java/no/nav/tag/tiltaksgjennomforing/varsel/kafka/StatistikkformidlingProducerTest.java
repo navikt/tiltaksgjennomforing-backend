@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.Map;
+
+import no.finn.unleash.Variant;
 import no.nav.tag.tiltaksgjennomforing.Miljø;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
 import no.nav.tag.tiltaksgjennomforing.avtale.BedriftNr;
@@ -52,7 +54,7 @@ class StatistikkformidlingProducerTest {
 
   @BeforeEach
   public void setUp() {
-    when(featureToggleService.isEnabled(anyString())).thenReturn(true);
+    when(featureToggleService.getVariant(anyString())).thenReturn(new Variant("disabled", (String) null, true));
 
     Map<String, Object> consumerProps = KafkaTestUtils.consumerProps("testGroup", "false", embeddedKafka);
     consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

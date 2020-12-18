@@ -20,7 +20,7 @@ public class StatistikkformidlingProducer {
     private final FeatureToggleService featureToggleService;
 
     public void publiserStatistikkformidlingMelding(Statistikkformidlingsmelding melding) {
-        boolean brukStatistikkformidling = featureToggleService.isEnabled("arbeidsgiver.tiltaksgjennomforing-api.statistikkformidling");
+        boolean brukStatistikkformidling = featureToggleService.getVariant("arbeidsgiver.tiltaksgjennomforing-api.statistikkformidling").isEnabled();
         if (!brukStatistikkformidling) {
             log.warn(
                     "Feature arbeidsgiver.tiltaksgjennomforing-api.statistikkformidling er ikke aktivert. Sender derfor ikke en Statistikkformidlingsmelding til Kafka topic.");

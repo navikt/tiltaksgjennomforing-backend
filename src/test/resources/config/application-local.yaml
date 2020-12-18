@@ -62,4 +62,6 @@ tiltaksgjennomforing:
   oppgave:
     oppgave-uri: http://localhost:8090/api/v1/oppgaver
   unleash:
+    #enabled: true
+    #unleash-uri: https://unleash.nais.io/api/
     mock: true

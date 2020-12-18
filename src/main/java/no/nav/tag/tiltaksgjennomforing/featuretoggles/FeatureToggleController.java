@@ -1,5 +1,6 @@
 package no.nav.tag.tiltaksgjennomforing.featuretoggles;
 
+import no.finn.unleash.Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class FeatureToggleController {
     }
 
     @GetMapping("/feature")
-    public ResponseEntity<Map<String, Boolean>> feature(@RequestParam("feature") List<String> features) {
+    public ResponseEntity<Map<String, Variant>> feature(@RequestParam("feature") List<String> features) {
 
         return ResponseEntity.status(OK).body(featureToggleService.hentFeatureToggles(features));
 
