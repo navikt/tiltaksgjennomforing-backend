@@ -4,7 +4,6 @@ import io.micrometer.core.annotation.Timed;
 import no.nav.tag.tiltaksgjennomforing.avtale.Identifikator;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -21,5 +20,8 @@ public interface BjelleVarselRepository extends JpaRepository<BjelleVarsel, UUID
     List<BjelleVarsel> findAllById(UUID id);
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
-    List<BjelleVarsel> findAllByAvtaleIdAndIdentifikatorAndVarslbarStatusNiva(UUID avtaleId, Identifikator identifikator, VarslbarStatusNiva varslbarStatusNiva);
+    List<BjelleVarsel> findAllByAvtaleIdAndIdentifikatorAndVarslbarStatus(UUID avtaleId, Identifikator identifikator, VarslbarStatus varslbarStatus);
+
+    @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
+    List<BjelleVarsel> findAllByIdentifikatorAndVarslbarStatus(Identifikator identifikator, VarslbarStatus varslbarStatus);
 }

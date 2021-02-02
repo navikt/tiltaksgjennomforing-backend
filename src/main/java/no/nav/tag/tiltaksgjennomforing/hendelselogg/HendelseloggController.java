@@ -7,6 +7,7 @@ import no.nav.tag.tiltaksgjennomforing.autorisasjon.InnloggingService;
 import no.nav.tag.tiltaksgjennomforing.avtale.AvtaleRepository;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalepart;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
+import no.nav.tag.tiltaksgjennomforing.avtale.NavIdent;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class HendelseloggController {
             @RequestParam("avtaleId") UUID avtaleId,
             @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
+        if (innloggetPart == Avtalerolle.VEILEDER || innloggetPart == Avtalerolle.BESLUTTER) {
+            return avtalepart.hentHendelseloggIntern(avtaleId, avtaleRepository, hendelseloggRepository);
+        }
         return avtalepart.hentHendelselogg(avtaleId, avtaleRepository, hendelseloggRepository);
     }
 }

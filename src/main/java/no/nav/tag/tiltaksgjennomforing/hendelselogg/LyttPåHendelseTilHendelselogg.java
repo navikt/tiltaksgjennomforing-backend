@@ -3,6 +3,7 @@ package no.nav.tag.tiltaksgjennomforing.hendelselogg;
 import lombok.RequiredArgsConstructor;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
 import no.nav.tag.tiltaksgjennomforing.avtale.events.*;
+import no.nav.tag.tiltaksgjennomforing.varsel.VarslbarHendelse;
 import no.nav.tag.tiltaksgjennomforing.varsel.VarslbarHendelseType;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -13,86 +14,93 @@ public class LyttPåHendelseTilHendelselogg {
     private final HendelseloggRepository repository;
 
     @EventListener
-    public void avtaleOpprettetAvVeileder(AvtaleOpprettetAvVeileder event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.OPPRETTET);
+    public void tilskuddsperiodeAvslått(TilskuddsperiodeAvslått event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(),
+                Avtalerolle.BESLUTTER, VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT, HendelseStatus.PRIVAT);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void avtaleOpprettetAvArbeidsgiver(AvtaleOpprettetAvArbeidsgiver event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.ARBEIDSGIVER, VarslbarHendelseType.OPPRETTET_AV_ARBEIDSGIVER);
+    public void avtaleOpprettetAvVeileder(AvtaleOpprettetAvVeileder event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.OPPRETTET);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void avtaleEndret(AvtaleEndret event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), event.getUtfortAv(), VarslbarHendelseType.ENDRET);
+    public void avtaleOpprettetAvArbeidsgiver(AvtaleOpprettetAvArbeidsgiver event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.ARBEIDSGIVER, VarslbarHendelseType.OPPRETTET_AV_ARBEIDSGIVER);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void godkjentAvDeltaker(GodkjentAvDeltaker event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.DELTAKER, VarslbarHendelseType.GODKJENT_AV_DELTAKER);
+    public void avtaleEndret(AvtaleEndret event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), event.getUtfortAv(), VarslbarHendelseType.ENDRET);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void godkjentAvArbeidsgiver(GodkjentAvArbeidsgiver event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.ARBEIDSGIVER, VarslbarHendelseType.GODKJENT_AV_ARBEIDSGIVER);
+    public void godkjentAvDeltaker(GodkjentAvDeltaker event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.DELTAKER, VarslbarHendelseType.GODKJENT_AV_DELTAKER);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void godkjentAvVeileder(GodkjentAvVeileder event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.GODKJENT_AV_VEILEDER);
+    public void godkjentAvArbeidsgiver(GodkjentAvArbeidsgiver event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.ARBEIDSGIVER, VarslbarHendelseType.GODKJENT_AV_ARBEIDSGIVER);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void godkjentPaVegneAv(GodkjentPaVegneAv event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.GODKJENT_PAA_VEGNE_AV);
+    public void godkjentAvVeileder(GodkjentAvVeileder event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.GODKJENT_AV_VEILEDER);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void godkjenningerOpphevetAvArbeidsgiver(GodkjenningerOpphevetAvArbeidsgiver event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.ARBEIDSGIVER, VarslbarHendelseType.GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER);
+    public void godkjentPaVegneAv(GodkjentPaVegneAv event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.GODKJENT_PAA_VEGNE_AV);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void godkjenningerOpphevetAvVeileder(GodkjenningerOpphevetAvVeileder event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.GODKJENNINGER_OPPHEVET_AV_VEILEDER);
+    public void godkjenningerOpphevetAvArbeidsgiver(GodkjenningerOpphevetAvArbeidsgiver event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.ARBEIDSGIVER, VarslbarHendelseType.GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void avtaleLåstOpp(AvtaleLåstOpp event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.LÅST_OPP);
+    public void godkjenningerOpphevetAvVeileder(GodkjenningerOpphevetAvVeileder event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.GODKJENNINGER_OPPHEVET_AV_VEILEDER);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void avbruttAvVeileder(AvbruttAvVeileder event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.AVBRUTT);
+    public void avtaleLåstOpp(AvtaleLåstOpp event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.LÅST_OPP);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void gjenopprettet(AvtaleGjenopprettet event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.GJENOPPRETTET);
+    public void avbruttAvVeileder(AvbruttAvVeileder event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.AVBRUTT);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void avtaleEndretVeileder(AvtaleNyVeileder event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.NY_VEILEDER);
+    public void gjenopprettet(AvtaleGjenopprettet event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.GJENOPPRETTET);
         repository.save(hendelselogg);
     }
 
     @EventListener
-    public void ufordeltAvtaleTildeltVeileder(AvtaleOpprettetAvArbeidsgiverErFordelt event) { // ok
-        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale().getId(), Avtalerolle.VEILEDER, VarslbarHendelseType.AVTALE_FORDELT);
+    public void avtaleEndretVeileder(AvtaleNyVeileder event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.NY_VEILEDER);
+        repository.save(hendelselogg);
+    }
+
+    @EventListener
+    public void ufordeltAvtaleTildeltVeileder(AvtaleOpprettetAvArbeidsgiverErFordelt event) {
+        Hendelselogg hendelselogg = Hendelselogg.nyHendelse(event.getAvtale(), Avtalerolle.VEILEDER, VarslbarHendelseType.AVTALE_FORDELT);
         repository.save(hendelselogg);
     }
 }

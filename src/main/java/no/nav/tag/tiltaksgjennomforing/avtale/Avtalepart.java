@@ -8,6 +8,7 @@ import no.nav.tag.tiltaksgjennomforing.exceptions.KanIkkeEndreException;
 import no.nav.tag.tiltaksgjennomforing.exceptions.KanIkkeOppheveException;
 import no.nav.tag.tiltaksgjennomforing.exceptions.RessursFinnesIkkeException;
 import no.nav.tag.tiltaksgjennomforing.exceptions.TilgangskontrollException;
+import no.nav.tag.tiltaksgjennomforing.hendelselogg.HendelseStatus;
 import no.nav.tag.tiltaksgjennomforing.hendelselogg.Hendelselogg;
 import no.nav.tag.tiltaksgjennomforing.hendelselogg.HendelseloggRepository;
 import no.nav.tag.tiltaksgjennomforing.persondata.PdlRespons;
@@ -107,6 +108,11 @@ public abstract class Avtalepart<T extends Identifikator> {
     }
 
     public List<Hendelselogg> hentHendelselogg(UUID avtaleId, AvtaleRepository avtaleRepository, HendelseloggRepository hendelseloggRepository) {
+        Avtale avtale = hentAvtale(avtaleRepository, avtaleId);
+        return hendelseloggRepository.findAllByAvtaleIdAndAndHendelseStatus(avtale.getId(), HendelseStatus.FELLES);
+    }
+
+    public List<Hendelselogg> hentHendelseloggIntern(UUID avtaleId, AvtaleRepository avtaleRepository, HendelseloggRepository hendelseloggRepository) {
         Avtale avtale = hentAvtale(avtaleRepository, avtaleId);
         return hendelseloggRepository.findAllByAvtaleId(avtale.getId());
     }

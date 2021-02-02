@@ -30,7 +30,7 @@ public class BjelleVarsel extends AbstractAggregateRoot<BjelleVarsel> {
     @Enumerated(EnumType.STRING)
     private VarslbarHendelseType varslbarHendelseType;
     @Enumerated(EnumType.STRING)
-    private VarslbarStatusNiva varslbarStatusNiva;
+    private VarslbarStatus varslbarStatus;
     private UUID varslbarHendelse;
     private UUID avtaleId;
     private LocalDateTime tidspunkt;
@@ -55,7 +55,7 @@ public class BjelleVarsel extends AbstractAggregateRoot<BjelleVarsel> {
     }
 
 
-    public static BjelleVarsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, VarslbarStatusNiva varslbarStatusNiva, Avtale avtale) {
+    public static BjelleVarsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, VarslbarStatus varslbarStatus, Avtale avtale) {
         BjelleVarsel varsel = new BjelleVarsel();
         varsel.id = UUID.randomUUID();
         varsel.tidspunkt = LocalDateTime.now();
@@ -64,8 +64,8 @@ public class BjelleVarsel extends AbstractAggregateRoot<BjelleVarsel> {
         varsel.varslingstekst = getVarslbarHendelseTekst(varslbarHendelse, avtale);
         varsel.varslbarHendelseType = varslbarHendelse.getVarslbarHendelseType();
         varsel.avtaleId = varslbarHendelse.getAvtaleId();
-        varsel.varslbarStatusNiva = varslbarStatusNiva;
-        varsel.lest = varslbarStatusNiva == VarslbarStatusNiva.HOY;
+        varsel.varslbarStatus = varslbarStatus;
+        varsel.lest = varslbarStatus == VarslbarStatus.LOGG;
         return varsel;
     }
 

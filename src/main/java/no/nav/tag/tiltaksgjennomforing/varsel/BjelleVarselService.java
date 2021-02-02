@@ -46,16 +46,26 @@ public class BjelleVarselService {
     }
 
     public List<BjelleVarsel> varslerForAvtaleparten(Avtalepart avtalepart, UUID avtaleId, Boolean lest) {
-        Stream<BjelleVarsel> stream = bjelleVarslerAvtalepart(avtalepart, avtaleId);
+        Stream<BjelleVarsel> stream;
+        if (avtaleId != null) {
+            stream = bjelleVarslerForAvtaleOgAvtalepart(avtalepart, avtaleId);
+        }else
+            stream = bjelleVarslerForAvtaleparten(avtalepart);
+
         if (lest != null) {
             stream = stream.filter(varsel -> varsel.isLest() == lest);
         }
         return stream.collect(Collectors.toList());
     }
 
-    private Stream<BjelleVarsel> bjelleVarslerAvtalepart(Avtalepart avtalepart, UUID avtaleId) {
-        return bjelleVarselRepository.findAllByAvtaleIdAndIdentifikatorAndVarslbarStatusNiva(
-                avtaleId, avtalepart.getIdentifikator(), VarslbarStatusNiva.HOY).stream();
+    private Stream<BjelleVarsel> bjelleVarslerForAvtaleOgAvtalepart(Avtalepart avtalepart, UUID avtaleId) {
+        return bjelleVarselRepository.findAllByAvtaleIdAndIdentifikatorAndVarslbarStatus(
+                avtaleId, avtalepart.getIdentifikator(), VarslbarStatus.VARSEL).stream();
+    }
+
+    private Stream<BjelleVarsel> bjelleVarslerForAvtaleparten(Avtalepart avtalepart) {
+        return bjelleVarselRepository.findAllByIdentifikatorAndVarslbarStatus(
+                avtalepart.getIdentifikator(), VarslbarStatus.VARSEL).stream();
     }
 
     private Stream<BjelleVarsel> bjelleVarslerForAvtalepart(Avtalepart avtalepart) {
