@@ -54,7 +54,8 @@ public class BjelleVarselService {
     }
 
     private Stream<BjelleVarsel> bjelleVarslerAvtalepart(Avtalepart avtalepart, UUID avtaleId) {
-        return bjelleVarselRepository.findAllByIdAAndIdentifikatorAndVarslbarStatusNivaEqualsHOY(avtaleId, avtalepart.getIdentifikator().asString()).stream();
+        return bjelleVarselRepository.findAllByAvtaleIdAndIdentifikatorAndVarslbarStatusNiva(
+                avtaleId, avtalepart.getIdentifikator(), VarslbarStatusNiva.HOY).stream();
     }
 
     private Stream<BjelleVarsel> bjelleVarslerForAvtalepart(Avtalepart avtalepart) {

@@ -21,5 +21,5 @@ public interface BjelleVarselRepository extends JpaRepository<BjelleVarsel, UUID
     List<BjelleVarsel> findAllById(UUID id);
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
-    List<BjelleVarsel> findAllByIdAAndIdentifikatorAndVarslbarStatusNivaEqualsHOY(UUID id, String identifikator);
+    List<BjelleVarsel> findAllByAvtaleIdAndIdentifikatorAndVarslbarStatusNiva(UUID avtaleId, Identifikator identifikator, VarslbarStatusNiva varslbarStatusNiva);
 }

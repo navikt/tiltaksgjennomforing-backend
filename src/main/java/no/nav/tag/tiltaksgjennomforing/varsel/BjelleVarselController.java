@@ -27,7 +27,7 @@ public class BjelleVarselController {
             @RequestParam(value = "avtaleId", required = false) UUID avtaleId,
             @RequestParam(value = "lest", required = false) Boolean lest, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        return bjelleVarselService.varslerForAvtaleparten(avtalepart, avtaleId, lest);
+        return bjelleVarselService.varslerForAvtalepart(avtalepart, avtaleId, lest);
     }
 
     @PostMapping("{varselId}/sett-til-lest")
