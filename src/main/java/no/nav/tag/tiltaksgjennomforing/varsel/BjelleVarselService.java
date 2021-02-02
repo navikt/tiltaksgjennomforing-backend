@@ -45,6 +45,18 @@ public class BjelleVarselService {
                 });
     }
 
+    public List<BjelleVarsel> varslerForAvtaleparten(Avtalepart avtalepart, UUID avtaleId, Boolean lest) {
+        Stream<BjelleVarsel> stream = bjelleVarslerAvtalepart(avtalepart, avtaleId);
+        if (lest != null) {
+            stream = stream.filter(varsel -> varsel.isLest() == lest);
+        }
+        return stream.collect(Collectors.toList());
+    }
+
+    private Stream<BjelleVarsel> bjelleVarslerAvtalepart(Avtalepart avtalepart, UUID avtaleId) {
+        return bjelleVarselRepository.findAllByIdAAndIdentifikatorAndVarslbarStatusNivaEqualsHOY(avtaleId, avtalepart.getIdentifikator().asString()).stream();
+    }
+
     private Stream<BjelleVarsel> bjelleVarslerForAvtalepart(Avtalepart avtalepart) {
         return bjelleVarselRepository.findAllByTidspunktAfter(LocalDateTime.now().minusDays(1)).stream()
                 .filter(bjelleVarsel -> avtalepart.identifikatorer().contains(bjelleVarsel.getIdentifikator()))

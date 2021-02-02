@@ -29,28 +29,33 @@ public class BjelleVarsel extends AbstractAggregateRoot<BjelleVarsel> {
     private String varslingstekst;
     @Enumerated(EnumType.STRING)
     private VarslbarHendelseType varslbarHendelseType;
+    @Enumerated(EnumType.STRING)
+    private VarslbarStatusNiva varslbarStatusNiva;
     private UUID varslbarHendelse;
     private UUID avtaleId;
     private LocalDateTime tidspunkt;
 
-    public static String getVarslbarHendelseTekst(VarslbarHendelse varslbarHendelse, Avtale avtale) {
+    public static String genererVarslbarHendelseTekst(Avtale avtale, String VarslbarHendelseTekst) {
+        TilskuddPeriode gjeldendePeriode = avtale.gjeldendeTilskuddsperiode();
+        String avslagÅrsaker = gjeldendePeriode.getAvslagsårsaker().stream()
+                .map(type -> type.getTekst().toLowerCase()).collect(Collectors.joining(", "));
+        return VarslbarHendelseTekst
+                .concat(gjeldendePeriode.getAvslåttAvNavIdent().asString())
+                .concat(". Årsak til retur: ")
+                .concat(avslagÅrsaker)
+                .concat(". Forklaring: ")
+                .concat(gjeldendePeriode.getAvslagsforklaring());
+    }
+
+    private static String getVarslbarHendelseTekst(VarslbarHendelse varslbarHendelse, Avtale avtale) {
         if (varslbarHendelse.getVarslbarHendelseType() == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT) {
-            TilskuddPeriode gjeldendePeriode = avtale.gjeldendeTilskuddsperiode();
-            String avslagÅrsaker = gjeldendePeriode.getAvslagsårsaker().stream()
-                    .map(type ->  type.getTekst().toLowerCase()).collect(Collectors.joining(", "));
-            return varslbarHendelse.getVarslbarHendelseType().getTekst()
-                    .concat(gjeldendePeriode.getAvslåttAvNavIdent().asString())
-                    .concat(". Årsak til retur: ")
-                    .concat(avslagÅrsaker)
-                    .concat(" Forklaring: ")
-                    .concat(gjeldendePeriode.getAvslagsforklaring());
-
+            return genererVarslbarHendelseTekst(avtale, varslbarHendelse.getVarslbarHendelseType().getTekst());
         }
-
         return varslbarHendelse.getVarslbarHendelseType().getTekst();
     }
 
-    public static BjelleVarsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, Avtale avtale) {
+
+    public static BjelleVarsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, VarslbarStatusNiva varslbarStatusNiva, Avtale avtale) {
         BjelleVarsel varsel = new BjelleVarsel();
         varsel.id = UUID.randomUUID();
         varsel.tidspunkt = LocalDateTime.now();
@@ -59,6 +64,8 @@ public class BjelleVarsel extends AbstractAggregateRoot<BjelleVarsel> {
         varsel.varslingstekst = getVarslbarHendelseTekst(varslbarHendelse, avtale);
         varsel.varslbarHendelseType = varslbarHendelse.getVarslbarHendelseType();
         varsel.avtaleId = varslbarHendelse.getAvtaleId();
+        varsel.varslbarStatusNiva = varslbarStatusNiva;
+        varsel.lest = varslbarStatusNiva == VarslbarStatusNiva.HOY;
         return varsel;
     }
 

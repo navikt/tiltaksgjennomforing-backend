@@ -228,7 +228,7 @@ class LyttPåHendelseTilHendelseloggTest {
     private void sjekkAtHendelseErLogget(Avtale avtale, VarslbarHendelseType varslbarHendelseType, Avtalerolle avtalerolle) {
         List<Hendelselogg> hendelser = hendelseloggRepository.findAllByAvtaleId(avtale.getId());
         assertThat(hendelser)
-                .filteredOn(logg -> logg.getHendelse() == varslbarHendelseType)
+                .filteredOn(logg -> logg.getHendelse().equals(varslbarHendelseType.toString()))
                 .filteredOn(logg -> logg.getUtførtAv() == avtalerolle)
                 .hasSize(1);
     }

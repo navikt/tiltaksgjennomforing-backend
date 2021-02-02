@@ -40,7 +40,7 @@ public class BjelleVarselRepositoryTest {
     @Test
     public void save__lagrer_riktig() {
         avtale = TestData.enArbeidstreningAvtale();
-        BjelleVarsel bjelleVarsel = BjelleVarsel.nyttVarsel(TestData.enIdentifikator(), varslbarHendelse, avtale);
+        BjelleVarsel bjelleVarsel = BjelleVarsel.nyttVarsel(TestData.enIdentifikator(), varslbarHendelse, VarslbarStatusNiva.HOY, avtale);
         BjelleVarsel lagretBjelleVarsel = bjelleVarselRepository.save(bjelleVarsel);
         assertThat(lagretBjelleVarsel).isEqualToIgnoringNullFields(bjelleVarsel);
     }

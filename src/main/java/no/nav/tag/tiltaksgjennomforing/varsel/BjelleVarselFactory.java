@@ -11,15 +11,15 @@ public class BjelleVarselFactory {
         this.hendelse = hendelse;
     }
 
-    public BjelleVarsel deltaker() {
-        return BjelleVarsel.nyttVarsel(avtale.getDeltakerFnr(), hendelse, avtale);
+    public BjelleVarsel deltaker(VarslbarStatusNiva niva) {
+        return BjelleVarsel.nyttVarsel(avtale.getDeltakerFnr(), hendelse, niva, avtale);
     }
 
-    public BjelleVarsel arbeidsgiver() {
-        return BjelleVarsel.nyttVarsel(avtale.getBedriftNr(), hendelse, avtale);
+    public BjelleVarsel arbeidsgiver(VarslbarStatusNiva niva) {
+        return BjelleVarsel.nyttVarsel(avtale.getBedriftNr(), hendelse, niva, avtale);
     }
 
-    public BjelleVarsel veileder() {
-        return BjelleVarsel.nyttVarsel(avtale.getVeilederNavIdent(), hendelse, avtale);
+    public BjelleVarsel veileder(VarslbarStatusNiva niva) {
+        return BjelleVarsel.nyttVarsel(avtale.getVeilederNavIdent(), hendelse, niva, avtale);
     }
 }
