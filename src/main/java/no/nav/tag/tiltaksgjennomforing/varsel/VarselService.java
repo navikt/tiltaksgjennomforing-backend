@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -17,7 +16,7 @@ public class VarselService {
     private final VarselRepository varselRepository;
 
     public void settTilLest(Avtalepart avtalepart, UUID varselId) {
-        bjelleVarslerForAvtalepart(avtalepart)
+        varslerForAvtalepart(avtalepart)
                 .filter(b -> b.getId().equals(varselId))
                 .forEach(b -> {
                     b.settTilLest();
@@ -26,7 +25,7 @@ public class VarselService {
     }
 
     public void settVarslerTilLest(Avtalepart avtalepart, List<UUID> varselIder) {
-        bjelleVarslerForAvtalepart(avtalepart)
+        varslerForAvtalepart(avtalepart)
                 .filter(b -> varselIder.contains(b.getId()))
                 .forEach(b -> {
                     b.settTilLest();
@@ -44,7 +43,7 @@ public class VarselService {
                 avtalepart.getIdentifikator(), VarslbarStatus.VARSEL);
     }
 
-    private Stream<Varsel> bjelleVarslerForAvtalepart(Avtalepart avtalepart) {
+    private Stream<Varsel> varslerForAvtalepart(Avtalepart avtalepart) {
         return varselRepository.findAllByTidspunktAfter(LocalDateTime.now().minusDays(1)).stream()
                 .filter(bjelleVarsel -> avtalepart.identifikatorer().contains(bjelleVarsel.getIdentifikator()))
                 .sorted(Comparator.comparing(Varsel::getTidspunkt).reversed());

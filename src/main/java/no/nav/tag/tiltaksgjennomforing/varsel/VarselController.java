@@ -20,27 +20,27 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class VarselController {
     private final InnloggingService innloggingService;
-    private final VarselService bjelleVarselService;
+    private final VarselService varselService;
 
-    @GetMapping // oversikt . Trenger ikke avtaleId.
+    @GetMapping
     public Iterable<Varsel> hentVarsler(
         @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        return bjelleVarselService.varslerForOversikt(avtalepart);
+        return varselService.varslerForOversikt(avtalepart);
     }
 
     @GetMapping("/logg-varsler")
     public List<Varsel> hentLoggVarsler(
             @RequestParam(value = "avtaleId") UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        return bjelleVarselService.varslerForAvtale(avtalepart, avtaleId);
+        return varselService.varslerForAvtale(avtalepart, avtaleId);
     }
 
     @PostMapping("{varselId}/sett-til-lest")
     @Transactional
     public ResponseEntity<?> settTilLest(@PathVariable("varselId") UUID varselId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        bjelleVarselService.settTilLest(avtalepart, varselId);
+        varselService.settTilLest(avtalepart, varselId);
         return ResponseEntity.ok().build();
     }
 
@@ -48,7 +48,7 @@ public class VarselController {
     @Transactional
     public ResponseEntity<?> settVarslerTilLest(@RequestBody List<UUID> varselIder, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        bjelleVarselService.settVarslerTilLest(avtalepart, varselIder);
+        varselService.settVarslerTilLest(avtalepart, varselIder);
         return ResponseEntity.ok().build();
     }
 }
