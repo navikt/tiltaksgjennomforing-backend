@@ -3,7 +3,7 @@ package no.nav.tag.tiltaksgjennomforing.hendelselogg;
 import lombok.Data;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
-import no.nav.tag.tiltaksgjennomforing.varsel.BjelleVarsel;
+import no.nav.tag.tiltaksgjennomforing.varsel.Varsel;
 import no.nav.tag.tiltaksgjennomforing.varsel.VarslbarHendelseType;
 
 import javax.persistence.Entity;
@@ -31,7 +31,7 @@ public class Hendelselogg {
 
     private static String hendelseBeskrivelse(Avtale avtale, VarslbarHendelseType hendelse) {
         if (hendelse == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT) {
-            return BjelleVarsel.genererVarslbarHendelseTekst(avtale, hendelse.getTekst());
+            return Varsel.genererVarslbarHendelseTekst(avtale, hendelse.getTekst());
         }
         return hendelse.getTekst();
     }

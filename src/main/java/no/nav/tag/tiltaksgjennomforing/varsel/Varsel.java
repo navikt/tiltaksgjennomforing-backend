@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-public class BjelleVarsel extends AbstractAggregateRoot<BjelleVarsel> {
+public class Varsel extends AbstractAggregateRoot<Varsel> {
     @Id
     private UUID id;
     private boolean lest;
@@ -55,8 +55,8 @@ public class BjelleVarsel extends AbstractAggregateRoot<BjelleVarsel> {
     }
 
 
-    public static BjelleVarsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, VarslbarStatus varslbarStatus, Avtale avtale) {
-        BjelleVarsel varsel = new BjelleVarsel();
+    public static Varsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, VarslbarStatus varslbarStatus, Avtale avtale) {
+        Varsel varsel = new Varsel();
         varsel.id = UUID.randomUUID();
         varsel.tidspunkt = LocalDateTime.now();
         varsel.identifikator = identifikator;

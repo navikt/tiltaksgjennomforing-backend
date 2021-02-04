@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class VarslbarHendelseTest {
 
     @Autowired
-    BjelleVarselService bjelleVarselService;
+    VarselService bjelleVarselService;
     @Autowired
     AvtaleRepository avtaleRepository;
 
@@ -37,7 +37,7 @@ public class VarslbarHendelseTest {
         avtale.avslåTilskuddsperiode(TestData.enNavIdent(), avslagsårsaker, avslagsforklaring);
         avtaleRepository.save(avtale);
 
-        List<BjelleVarsel> varsler = bjelleVarselService.varslerForAvtalepart(TestData.enVeileder(avtale), avtale.getId(), false);
+        List<Varsel> varsler = bjelleVarselService.varslerForAvtale(TestData.enVeileder(avtale), avtale.getId());
         assertThat(varsler).extracting("varslbarHendelseType").contains(VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT);
 
         String varselTekst = varsler.get(0).getVarslingstekst();
