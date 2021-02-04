@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface VarselRepository extends JpaRepository<Varsel, UUID> {
@@ -28,4 +29,7 @@ public interface VarselRepository extends JpaRepository<Varsel, UUID> {
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
     List<Varsel> findAllByLestIsFalseAndAndIdentifikatorAndVarslbarStatus(Identifikator identifikator, VarslbarStatus varslbarStatus);
+
+    @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
+    List<Varsel> findAllByLestIsFalseAndVarslbarStatusAndMottakerAndAvtaleIdIn(VarslbarStatus varslbarStatus, Avtalerolle mottaker, Set<UUID> avtaleId);
 }

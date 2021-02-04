@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -34,13 +35,12 @@ public class VarselService {
                 });
     }
 
-    public List<Varsel> varslerForAvtale(Avtalepart avtalepart, UUID avtaleId, Avtalerolle innloggetPart) {
+    public List<Varsel> varslerForAvtale(UUID avtaleId, Avtalerolle innloggetPart) {
         return varselRepository.findAllByAvtaleIdAndMottaker(avtaleId, innloggetPart);
     }
 
-    public List<Varsel> varslerForOversikt(Avtalepart avtalepart) {
-        return varselRepository.findAllByLestIsFalseAndAndIdentifikatorAndVarslbarStatus(
-                avtalepart.getIdentifikator(), VarslbarStatus.VARSEL);
+    public List<Varsel> varslerForOversikt(Avtalerolle avtalerolle, Set<UUID> avtaleId) {
+        return varselRepository.findAllByLestIsFalseAndVarslbarStatusAndMottakerAndAvtaleIdIn(VarslbarStatus.VARSEL, avtalerolle, avtaleId);
     }
 
     private Stream<Varsel> varslerForAvtalepart(Avtalepart avtalepart) {
