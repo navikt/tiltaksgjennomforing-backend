@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collector;
+
 import no.nav.tag.tiltaksgjennomforing.Miljø;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avslagsårsak;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
@@ -40,8 +43,8 @@ public class VarslbarHendelseTest {
         List<Varsel> varsler = varselService.varslerForAvtale(TestData.enVeileder(avtale), avtale.getId());
         assertThat(varsler).extracting("varslbarHendelseType").contains(VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT);
 
-        String varselTekst = varsler.get(0).getVarslingstekst();
-        assertThat(varselTekst).contains(Avslagsårsak.FEIL_I_PROSENTSATS.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_FAKTA.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_REGELFORSTÅELSE.getTekst().toLowerCase());
+        Varsel varselTekst = varsler.stream().filter(elem -> elem.getVarslbarHendelseType().equals(VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT)).collect(Collector.of(Varsel::new))
+        assertThat(varselTekst).contains(Avslagsårsak.FEIL_I_PROSENTSATS, Avslagsårsak.FEIL_I_FAKTA.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_REGELFORSTÅELSE.getTekst().toLowerCase());
         assertThat(varselTekst).contains(avslagsforklaring);
     }
 

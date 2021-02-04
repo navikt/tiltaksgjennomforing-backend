@@ -7,6 +7,4 @@ import java.util.UUID;
 
 public interface HendelseloggRepository extends JpaRepository<Hendelselogg, UUID> {
     List<Hendelselogg> findAllByAvtaleId(UUID avtaleId);
-
-    List<Hendelselogg> findAllByAvtaleIdAndAndHendelseStatus(UUID avtaleId, HendelseStatus hendelseStatus);
 }

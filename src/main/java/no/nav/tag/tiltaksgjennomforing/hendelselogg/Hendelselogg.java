@@ -1,9 +1,7 @@
 package no.nav.tag.tiltaksgjennomforing.hendelselogg;
 
 import lombok.Data;
-import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
-import no.nav.tag.tiltaksgjennomforing.varsel.Varsel;
 import no.nav.tag.tiltaksgjennomforing.varsel.VarslbarHendelseType;
 
 import javax.persistence.Entity;
@@ -24,35 +22,14 @@ public class Hendelselogg {
     private Avtalerolle utførtAv;
     @Enumerated(EnumType.STRING)
     private VarslbarHendelseType hendelse;
-    private String beskrivelse;
-    @Enumerated(EnumType.STRING)
-    private HendelseStatus hendelseStatus;
 
-
-    private static String hendelseBeskrivelse(Avtale avtale, VarslbarHendelseType hendelse) {
-        if (hendelse == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT) {
-            return Varsel.genererVarslbarHendelseTekst(avtale, hendelse.getTekst());
-        }
-        return hendelse.getTekst();
-    }
-
-    private static Hendelselogg lagHendelse(Avtale avtale, Avtalerolle utførtAv, VarslbarHendelseType hendelse, HendelseStatus status) {
+    public static Hendelselogg nyHendelse(UUID avtaleId, Avtalerolle utførtAv, VarslbarHendelseType hendelse) {
         Hendelselogg hendelselogg = new Hendelselogg();
         hendelselogg.setId(UUID.randomUUID());
-        hendelselogg.setAvtaleId(avtale.getId());
+        hendelselogg.setAvtaleId(avtaleId);
         hendelselogg.setTidspunkt(LocalDateTime.now());
         hendelselogg.setUtførtAv(utførtAv);
         hendelselogg.setHendelse(hendelse);
-        hendelselogg.setBeskrivelse(hendelseBeskrivelse(avtale, hendelse));
-        hendelselogg.setHendelseStatus(status);
         return hendelselogg;
     }
-
-    public static Hendelselogg nyHendelse(Avtale avtale, Avtalerolle utførtAv, VarslbarHendelseType hendelse) {
-      return lagHendelse(avtale, utførtAv, hendelse, HendelseStatus.FELLES);
-    }
-    public static Hendelselogg nyHendelse(Avtale avtale, Avtalerolle utførtAv, VarslbarHendelseType hendelse, HendelseStatus status) {
-        return lagHendelse(avtale, utførtAv, hendelse, status);
-    }
 }
-
