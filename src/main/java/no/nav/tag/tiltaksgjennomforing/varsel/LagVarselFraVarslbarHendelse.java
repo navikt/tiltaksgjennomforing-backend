@@ -13,11 +13,11 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class LagBjelleVarselFraVarslbarHendelse {
-    private final BjelleVarselRepository bjelleVarselRepository;
+public class LagVarselFraVarslbarHendelse {
+    private final VarselRepository varselRepository;
 
-    static List<BjelleVarsel> lagVarslerGodkjenningerOpphevetArbeidsgiver (boolean erGodkjentAvDeltaker, BjelleVarselFactory factory) {
-        var varslinger = new ArrayList<BjelleVarsel>();
+    static List<Varsel> lagVarslerGodkjenningerOpphevetArbeidsgiver (boolean erGodkjentAvDeltaker, VarselFactory factory) {
+        var varslinger = new ArrayList<Varsel>();
         if (erGodkjentAvDeltaker) {
             varslinger.add(factory.deltaker(VarslbarStatus.VARSEL));
         } else varslinger.add(factory.deltaker(VarslbarStatus.LOGG));
@@ -27,8 +27,8 @@ public class LagBjelleVarselFraVarslbarHendelse {
         return  varslinger;
     }
 
-    static List<BjelleVarsel> lagVarslerGodkjenningerOpphevetVeileder(GamleVerdier gamleVerdier, BjelleVarselFactory factory) {
-        var varslinger = new ArrayList<BjelleVarsel>();
+    static List<Varsel> lagVarslerGodkjenningerOpphevetVeileder(GamleVerdier gamleVerdier, VarselFactory factory) {
+        var varslinger = new ArrayList<Varsel>();
         if (gamleVerdier.isGodkjentAvDeltaker()) {
             varslinger.add(factory.deltaker(VarslbarStatus.VARSEL));
         } else varslinger.add(factory.deltaker(VarslbarStatus.LOGG));
@@ -42,8 +42,8 @@ public class LagBjelleVarselFraVarslbarHendelse {
     }
 
 
-    static List<BjelleVarsel> lagBjelleVarsler(Avtale avtale, VarslbarHendelse varslbarHendelse, GamleVerdier gamleVerdier) {
-        var factory = new BjelleVarselFactory(avtale, varslbarHendelse);
+    static List<Varsel> lagBjelleVarsler(Avtale avtale, VarslbarHendelse varslbarHendelse, GamleVerdier gamleVerdier) {
+        var factory = new VarselFactory(avtale, varslbarHendelse);
         VarslbarStatus VARSEL = VarslbarStatus.VARSEL;
         VarslbarStatus LOGG = VarslbarStatus.LOGG;
 
@@ -55,6 +55,7 @@ public class LagBjelleVarselFraVarslbarHendelse {
             case GODKJENT_AV_ARBEIDSGIVER:
                 return List.of(factory.veileder(VARSEL), factory.arbeidsgiver(LOGG), factory.deltaker(LOGG));
             case TILSKUDDSPERIODE_AVSLATT:
+            case TILSKUDDSPERIODE_GODKJENT:
                 return List.of(factory.veileder(VARSEL));
             case GODKJENT_PAA_VEGNE_AV:
                 return List.of(factory.arbeidsgiver(VARSEL), factory.deltaker(LOGG), factory.veileder(LOGG));
@@ -74,7 +75,7 @@ public class LagBjelleVarselFraVarslbarHendelse {
     }
 
     @EventListener
-    public void lagreBjelleVarsler(VarslbarHendelseOppstaatt event) {
-        bjelleVarselRepository.saveAll(lagBjelleVarsler(event.getAvtale(), event.getVarslbarHendelse(), event.getGamleVerdier()));
+    public void lagreVarsler(VarslbarHendelseOppstaatt event) {
+        varselRepository.saveAll(lagBjelleVarsler(event.getAvtale(), event.getVarslbarHendelse(), event.getGamleVerdier()));
     }
 }

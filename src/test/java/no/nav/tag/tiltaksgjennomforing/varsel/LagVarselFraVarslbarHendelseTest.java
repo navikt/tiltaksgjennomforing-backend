@@ -16,7 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class LagBjelleVarselFraVarslbarHendelseTest {
+public class LagVarselFraVarslbarHendelseTest {
     private static Avtale avtale;
     private static Identifikator deltaker;
     private static Identifikator arbeidsgiver;
@@ -39,7 +39,7 @@ public class LagBjelleVarselFraVarslbarHendelseTest {
     @MethodSource("provider")
     void testLagBjelleVarsler(VarslbarHendelseType hendelse, GamleVerdier gamleVerdier, List<Identifikator> skalVarsles) {
 
-        List<BjelleVarsel> bjelleVarsler = LagBjelleVarselFraVarslbarHendelse.lagBjelleVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse), gamleVerdier);
+        List<Varsel> bjelleVarsler = LagVarselFraVarslbarHendelse.lagBjelleVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse), gamleVerdier);
         assertThat(bjelleVarsler).extracting("identifikator").containsOnlyElementsOf(skalVarsles);
         if (!bjelleVarsler.isEmpty()) {
              assertThat(bjelleVarsler).extracting("varslbarHendelseType").containsOnly(hendelse);
