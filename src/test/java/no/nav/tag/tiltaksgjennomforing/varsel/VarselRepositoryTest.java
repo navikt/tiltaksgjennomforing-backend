@@ -19,9 +19,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @ActiveProfiles(Miljø.LOCAL)
 @DirtiesContext
-public class BjelleVarselRepositoryTest {
+public class VarselRepositoryTest {
     @Autowired
-    private BjelleVarselRepository bjelleVarselRepository;
+    private VarselRepository varselRepository;
     @Autowired
     private AvtaleRepository avtaleRepository;
     @Autowired
@@ -40,8 +40,8 @@ public class BjelleVarselRepositoryTest {
     @Test
     public void save__lagrer_riktig() {
         avtale = TestData.enArbeidstreningAvtale();
-        BjelleVarsel bjelleVarsel = BjelleVarsel.nyttVarsel(TestData.enIdentifikator(), varslbarHendelse, VarslbarStatus.VARSEL, avtale);
-        BjelleVarsel lagretBjelleVarsel = bjelleVarselRepository.save(bjelleVarsel);
-        assertThat(lagretBjelleVarsel).isEqualToIgnoringNullFields(bjelleVarsel);
+        Varsel varsel = Varsel.nyttVarsel(TestData.enIdentifikator(), varslbarHendelse, VarslbarStatus.VARSEL, avtale);
+        Varsel lagretVarsel = varselRepository.save(varsel);
+        assertThat(lagretVarsel).isEqualToIgnoringNullFields(varsel);
     }
 }
