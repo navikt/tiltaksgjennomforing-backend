@@ -17,7 +17,7 @@ public interface BjelleVarselRepository extends JpaRepository<BjelleVarsel, UUID
     List<BjelleVarsel> findAllByTidspunktAfter(LocalDateTime tidspunkt);
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
-    List<BjelleVarsel> findAllById(UUID id);
+    List<BjelleVarsel> findAllByAvtaleIdAndIdentifikator(UUID avtaleId, Identifikator identifikator);
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
     List<BjelleVarsel> findAllByAvtaleIdAndIdentifikatorAndVarslbarStatus(UUID avtaleId, Identifikator identifikator, VarslbarStatus varslbarStatus);

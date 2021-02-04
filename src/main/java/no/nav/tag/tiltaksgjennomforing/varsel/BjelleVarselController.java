@@ -30,6 +30,13 @@ public class BjelleVarselController {
         return bjelleVarselService.varslerForAvtaleparten(avtalepart, avtaleId, lest);
     }
 
+    @GetMapping("/logg-varsler")
+    public List<BjelleVarsel> hentLoggVarsler(
+            @RequestParam(value = "avtaleId", required = false) UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
+        Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
+        return bjelleVarselService.loggVarslerAvtaleParten(avtalepart, avtaleId);
+    }
+
     @PostMapping("{varselId}/sett-til-lest")
     @Transactional
     public ResponseEntity<?> settTilLest(@PathVariable("varselId") UUID varselId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
