@@ -23,7 +23,8 @@ public enum VarslbarHendelseType {
     OPPRETTET_AV_ARBEIDSGIVER("Avtale er opprettet av arbeidsgiver"),
     NY_VEILEDER("Avtale tildelt ny veileder"),
     AVTALE_FORDELT("Avtale tildelt veileder"),
-    TILSKUDDSPERIODE_AVSLATT("Avtalen har blitt sendt i retur av ");
+    TILSKUDDSPERIODE_AVSLATT("Tilskuddsperioden har blitt sendt i retur av "),
+    TILSKUDDSPERIODE_GODKJENT("Tilskuddsperioden har blitt godtkjent av beslutter");
 
     private final String tekst;
 
