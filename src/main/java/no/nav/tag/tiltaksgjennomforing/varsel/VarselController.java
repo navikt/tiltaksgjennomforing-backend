@@ -33,7 +33,7 @@ public class VarselController {
     public List<Varsel> hentLoggVarsler(
             @RequestParam(value = "avtaleId") UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        return varselService.varslerForAvtale(avtalepart, avtaleId);
+        return varselService.varslerForAvtale(avtalepart, avtaleId, innloggetPart);
     }
 
     @PostMapping("{varselId}/sett-til-lest")

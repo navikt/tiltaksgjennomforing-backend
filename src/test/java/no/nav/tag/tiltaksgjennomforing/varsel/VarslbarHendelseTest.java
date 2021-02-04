@@ -1,10 +1,7 @@
 package no.nav.tag.tiltaksgjennomforing.varsel;
 
 import no.nav.tag.tiltaksgjennomforing.Miljø;
-import no.nav.tag.tiltaksgjennomforing.avtale.Avslagsårsak;
-import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
-import no.nav.tag.tiltaksgjennomforing.avtale.AvtaleRepository;
-import no.nav.tag.tiltaksgjennomforing.avtale.TestData;
+import no.nav.tag.tiltaksgjennomforing.avtale.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ public class VarslbarHendelseTest {
         avtale.avslåTilskuddsperiode(TestData.enNavIdent(), avslagsårsaker, avslagsforklaring);
         avtaleRepository.save(avtale);
 
-        List<Varsel> varsler = varselService.varslerForAvtale(TestData.enVeileder(avtale), avtale.getId());
+        List<Varsel> varsler = varselService.varslerForAvtale(TestData.enVeileder(avtale), avtale.getId(), Avtalerolle.VEILEDER);
 
         String varselTekst = varsler.stream().filter(elem -> elem.getVarslbarHendelseType() == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT).findFirst().orElseThrow().getVarslingstekst();
         assertThat(varselTekst).contains(Avslagsårsak.FEIL_I_PROSENTSATS.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_FAKTA.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_REGELFORSTÅELSE.getTekst().toLowerCase());

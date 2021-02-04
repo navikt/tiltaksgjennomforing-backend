@@ -2,6 +2,7 @@ package no.nav.tag.tiltaksgjennomforing.varsel;
 
 import lombok.RequiredArgsConstructor;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalepart;
+import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,9 +34,8 @@ public class VarselService {
                 });
     }
 
-    public List<Varsel> varslerForAvtale(Avtalepart avtalepart, UUID avtaleId) {
-        return varselRepository.findAllByAvtaleIdAndIdentifikator(
-                avtaleId, avtalepart.getIdentifikator());
+    public List<Varsel> varslerForAvtale(Avtalepart avtalepart, UUID avtaleId, Avtalerolle innloggetPart) {
+        return varselRepository.findAllByAvtaleIdAndMottaker(avtaleId, innloggetPart);
     }
 
     public List<Varsel> varslerForOversikt(Avtalepart avtalepart) {

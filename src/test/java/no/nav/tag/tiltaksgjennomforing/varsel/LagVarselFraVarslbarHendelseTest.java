@@ -1,13 +1,5 @@
 package no.nav.tag.tiltaksgjennomforing.varsel;
 
-import static no.nav.tag.tiltaksgjennomforing.varsel.VarslbarHendelseType.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.params.provider.Arguments.of;
-
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Stream;
-
 import no.nav.tag.tiltaksgjennomforing.avtale.*;
 import no.nav.tag.tiltaksgjennomforing.avtale.events.GamleVerdier;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,6 +7,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static no.nav.tag.tiltaksgjennomforing.varsel.VarslbarHendelseType.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 public class LagVarselFraVarslbarHendelseTest {
     private static Avtale avtale;
@@ -38,7 +38,7 @@ public class LagVarselFraVarslbarHendelseTest {
     @MethodSource("provider")
     void testLagVarsler(VarslbarHendelseType hendelse, GamleVerdier gamleVerdier, List<Identifikator> skalVarsles, List<Identifikator> skalFåLogg) {
 
-        List<Varsel> varsler = LagVarselFraVarslbarHendelse.lagBjelleVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse), gamleVerdier);
+        List<Varsel> varsler = LagVarselFraVarslbarHendelse.lagBjelleVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse, Avtalerolle.VEILEDER), gamleVerdier, Avtalerolle.VEILEDER);
         assertThat(varsler).filteredOn(varsel -> varsel.getVarslbarStatus() == VarslbarStatus.VARSEL).extracting(Varsel::getIdentifikator).containsAll(skalVarsles);
         assertThat(varsler).filteredOn(varsel -> varsel.getVarslbarStatus() == VarslbarStatus.LOGG).extracting(Varsel::getIdentifikator).containsAll(skalFåLogg);
         if (!varsler.isEmpty()) {

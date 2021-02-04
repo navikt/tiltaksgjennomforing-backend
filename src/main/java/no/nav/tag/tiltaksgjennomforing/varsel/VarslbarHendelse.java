@@ -3,6 +3,7 @@ package no.nav.tag.tiltaksgjennomforing.varsel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
+import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
 import no.nav.tag.tiltaksgjennomforing.avtale.events.GamleVerdier;
 import no.nav.tag.tiltaksgjennomforing.varsel.events.VarslbarHendelseOppstaatt;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -22,17 +23,17 @@ public class VarslbarHendelse extends AbstractAggregateRoot<VarslbarHendelse> {
     private UUID avtaleId;
     private VarslbarHendelseType varslbarHendelseType;
 
-    public static VarslbarHendelse nyHendelse(Avtale avtale, VarslbarHendelseType varslbarHendelseType) {
-        return nyHendelse(avtale, varslbarHendelseType, new GamleVerdier());
+    public static VarslbarHendelse nyHendelse(Avtale avtale, VarslbarHendelseType varslbarHendelseType, Avtalerolle utførtAv) {
+        return nyHendelse(avtale, varslbarHendelseType, new GamleVerdier(), utførtAv);
     }
 
-    public static VarslbarHendelse nyHendelse(Avtale avtale, VarslbarHendelseType varslbarHendelseType, GamleVerdier gamleVerdier) {
+    public static VarslbarHendelse nyHendelse(Avtale avtale, VarslbarHendelseType varslbarHendelseType, GamleVerdier gamleVerdier, Avtalerolle utførtAv) {
         VarslbarHendelse varslbarHendelse = new VarslbarHendelse();
         varslbarHendelse.id = UUID.randomUUID();
         varslbarHendelse.tidspunkt = LocalDateTime.now();
         varslbarHendelse.avtaleId = avtale.getId();
         varslbarHendelse.varslbarHendelseType = varslbarHendelseType;
-        varslbarHendelse.registerEvent(new VarslbarHendelseOppstaatt(avtale, varslbarHendelse, gamleVerdier));
+        varslbarHendelse.registerEvent(new VarslbarHendelseOppstaatt(avtale, varslbarHendelse, gamleVerdier, utførtAv));
         return varslbarHendelse;
     }
 

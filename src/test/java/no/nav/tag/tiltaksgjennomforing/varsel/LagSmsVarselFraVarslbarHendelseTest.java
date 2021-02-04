@@ -1,11 +1,7 @@
 package no.nav.tag.tiltaksgjennomforing.varsel;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-
-import java.util.List;
-import java.util.stream.Stream;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
+import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
 import no.nav.tag.tiltaksgjennomforing.avtale.TestData;
 import no.nav.tag.tiltaksgjennomforing.avtale.events.GamleVerdier;
 import org.assertj.core.groups.Tuple;
@@ -14,6 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 public class LagSmsVarselFraVarslbarHendelseTest {
     private static Avtale avtale;
@@ -43,7 +45,7 @@ public class LagSmsVarselFraVarslbarHendelseTest {
     @MethodSource("provider")
     void testLagSmsVarsler(VarslbarHendelseType hendelse, GamleVerdier gamleVerdier, List<Tuple> skalVarsles) {
         Avtale avtale = TestData.enArbeidstreningAvtale();
-        List<SmsVarsel> smsVarsler = LagSmsVarselFraVarslbarHendelse.lagSmsVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse), gamleVerdier);
+        List<SmsVarsel> smsVarsler = LagSmsVarselFraVarslbarHendelse.lagSmsVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse, Avtalerolle.VEILEDER), gamleVerdier);
         assertThat(smsVarsler).extracting("telefonnummer", "identifikator", "meldingstekst")
                 .containsOnlyElementsOf(skalVarsles);
     }

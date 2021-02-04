@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
-import no.nav.tag.tiltaksgjennomforing.avtale.Identifikator;
-import no.nav.tag.tiltaksgjennomforing.avtale.IdentifikatorConverter;
-import no.nav.tag.tiltaksgjennomforing.avtale.TilskuddPeriode;
+import no.nav.tag.tiltaksgjennomforing.avtale.*;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
@@ -34,6 +31,10 @@ public class Varsel extends AbstractAggregateRoot<Varsel> {
     private UUID varslbarHendelse;
     private UUID avtaleId;
     private LocalDateTime tidspunkt;
+    @Enumerated(EnumType.STRING)
+    private Avtalerolle mottaker;
+    @Enumerated(EnumType.STRING)
+    private Avtalerolle utførtAv;
 
     public static String genererVarslbarHendelseTekst(Avtale avtale, String VarslbarHendelseTekst) {
         TilskuddPeriode gjeldendePeriode = avtale.gjeldendeTilskuddsperiode();
@@ -55,7 +56,7 @@ public class Varsel extends AbstractAggregateRoot<Varsel> {
     }
 
 
-    public static Varsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, VarslbarStatus varslbarStatus, Avtale avtale) {
+    public static Varsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, VarslbarStatus varslbarStatus, Avtale avtale, Avtalerolle mottaker, Avtalerolle utførtAv) {
         Varsel varsel = new Varsel();
         varsel.id = UUID.randomUUID();
         varsel.tidspunkt = LocalDateTime.now();
@@ -65,7 +66,8 @@ public class Varsel extends AbstractAggregateRoot<Varsel> {
         varsel.varslbarHendelseType = varslbarHendelse.getVarslbarHendelseType();
         varsel.avtaleId = varslbarHendelse.getAvtaleId();
         varsel.varslbarStatus = varslbarStatus;
-        varsel.lest = varslbarStatus == VarslbarStatus.LOGG;
+        varsel.mottaker = mottaker;
+        varsel.utførtAv = utførtAv;
         return varsel;
     }
 

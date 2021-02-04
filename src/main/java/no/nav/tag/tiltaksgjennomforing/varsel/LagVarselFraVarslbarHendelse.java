@@ -2,6 +2,7 @@ package no.nav.tag.tiltaksgjennomforing.varsel;
 
 import lombok.RequiredArgsConstructor;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
+import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
 import no.nav.tag.tiltaksgjennomforing.avtale.events.GamleVerdier;
 import no.nav.tag.tiltaksgjennomforing.varsel.events.VarslbarHendelseOppstaatt;
 import org.springframework.context.event.EventListener;
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static no.nav.tag.tiltaksgjennomforing.varsel.VarslbarStatus.LOGG;
+import static no.nav.tag.tiltaksgjennomforing.varsel.VarslbarStatus.VARSEL;
+
 @Component
 @RequiredArgsConstructor
 public class LagVarselFraVarslbarHendelse {
@@ -19,33 +23,31 @@ public class LagVarselFraVarslbarHendelse {
     static List<Varsel> lagVarslerGodkjenningerOpphevetArbeidsgiver (boolean erGodkjentAvDeltaker, VarselFactory factory) {
         var varslinger = new ArrayList<Varsel>();
         if (erGodkjentAvDeltaker) {
-            varslinger.add(factory.deltaker(VarslbarStatus.VARSEL));
-        } else varslinger.add(factory.deltaker(VarslbarStatus.LOGG));
+            varslinger.add(factory.deltaker(VARSEL));
+        } else varslinger.add(factory.deltaker(LOGG));
 
-        varslinger.add(factory.arbeidsgiver(VarslbarStatus.LOGG));
-        varslinger.add(factory.veileder(VarslbarStatus.VARSEL));
+        varslinger.add(factory.arbeidsgiver(LOGG));
+        varslinger.add(factory.veileder(VARSEL));
         return  varslinger;
     }
 
     static List<Varsel> lagVarslerGodkjenningerOpphevetVeileder(GamleVerdier gamleVerdier, VarselFactory factory) {
         var varslinger = new ArrayList<Varsel>();
         if (gamleVerdier.isGodkjentAvDeltaker()) {
-            varslinger.add(factory.deltaker(VarslbarStatus.VARSEL));
-        } else varslinger.add(factory.deltaker(VarslbarStatus.LOGG));
+            varslinger.add(factory.deltaker(VARSEL));
+        } else varslinger.add(factory.deltaker(LOGG));
 
         if (gamleVerdier.isGodkjentAvArbeidsgiver()) {
-            varslinger.add(factory.arbeidsgiver(VarslbarStatus.VARSEL));
-        } else varslinger.add(factory.arbeidsgiver(VarslbarStatus.LOGG));
+            varslinger.add(factory.arbeidsgiver(VARSEL));
+        } else varslinger.add(factory.arbeidsgiver(LOGG));
 
-        varslinger.add(factory.veileder(VarslbarStatus.LOGG));
+        varslinger.add(factory.veileder(LOGG));
         return varslinger;
     }
 
 
-    static List<Varsel> lagBjelleVarsler(Avtale avtale, VarslbarHendelse varslbarHendelse, GamleVerdier gamleVerdier) {
-        var factory = new VarselFactory(avtale, varslbarHendelse);
-        VarslbarStatus VARSEL = VarslbarStatus.VARSEL;
-        VarslbarStatus LOGG = VarslbarStatus.LOGG;
+    static List<Varsel> lagBjelleVarsler(Avtale avtale, VarslbarHendelse varslbarHendelse, GamleVerdier gamleVerdier, Avtalerolle utførtAv) {
+        var factory = new VarselFactory(avtale, varslbarHendelse, utførtAv);
 
         switch (varslbarHendelse.getVarslbarHendelseType()) {
             case OPPRETTET:
@@ -76,6 +78,6 @@ public class LagVarselFraVarslbarHendelse {
 
     @EventListener
     public void lagreVarsler(VarslbarHendelseOppstaatt event) {
-        varselRepository.saveAll(lagBjelleVarsler(event.getAvtale(), event.getVarslbarHendelse(), event.getGamleVerdier()));
+        varselRepository.saveAll(lagBjelleVarsler(event.getAvtale(), event.getVarslbarHendelse(), event.getGamleVerdier(), event.getUtførtAv()));
     }
 }
