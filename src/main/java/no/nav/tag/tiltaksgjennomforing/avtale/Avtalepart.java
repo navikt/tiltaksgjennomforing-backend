@@ -16,7 +16,6 @@ import no.nav.tag.tiltaksgjennomforing.persondata.PdlRespons;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -48,7 +47,6 @@ public abstract class Avtalepart<T extends Identifikator> {
         return hentAlleAvtalerMedMuligTilgang(avtaleRepository, queryParametre).stream()
                 .filter(queryParametre)
                 .filter(this::harTilgang)
-                .sorted(Comparator.nullsLast(Comparator.comparing(Avtale::getSistEndret).reversed()))
                 .collect(Collectors.toList());
     }
 
