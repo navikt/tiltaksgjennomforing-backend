@@ -18,9 +18,9 @@ import java.util.UUID;
 @RequestMapping("/varsler")
 @Timed
 @RequiredArgsConstructor
-public class BjelleVarselController {
+public class VarselController {
     private final InnloggingService innloggingService;
-    private final BjelleVarselService bjelleVarselService;
+    private final VarselService bjelleVarselService;
 
     @GetMapping // oversikt . Trenger ikke avtaleId.
     public Iterable<Varsel> hentVarsler(
