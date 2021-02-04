@@ -1,20 +1,7 @@
 package no.nav.tag.tiltaksgjennomforing.hendelselogg;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.List;
 import no.nav.tag.tiltaksgjennomforing.Miljø;
-import no.nav.tag.tiltaksgjennomforing.avtale.AvbruttInfo;
-import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
-import no.nav.tag.tiltaksgjennomforing.avtale.AvtaleRepository;
-import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
-import no.nav.tag.tiltaksgjennomforing.avtale.Deltaker;
-import no.nav.tag.tiltaksgjennomforing.avtale.NavIdent;
-import no.nav.tag.tiltaksgjennomforing.avtale.OpprettAvtale;
-import no.nav.tag.tiltaksgjennomforing.avtale.TestData;
-import no.nav.tag.tiltaksgjennomforing.avtale.Tiltakstype;
+import no.nav.tag.tiltaksgjennomforing.avtale.*;
 import no.nav.tag.tiltaksgjennomforing.varsel.VarslbarHendelseType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles({Miljø.LOCAL, "wiremock"})
@@ -228,7 +221,7 @@ class LyttPåHendelseTilHendelseloggTest {
     private void sjekkAtHendelseErLogget(Avtale avtale, VarslbarHendelseType varslbarHendelseType, Avtalerolle avtalerolle) {
         List<Hendelselogg> hendelser = hendelseloggRepository.findAllByAvtaleId(avtale.getId());
         assertThat(hendelser)
-                .filteredOn(logg -> logg.getHendelse().equals(varslbarHendelseType.toString()))
+                .filteredOn(logg -> logg.getHendelse() == varslbarHendelseType)
                 .filteredOn(logg -> logg.getUtførtAv() == avtalerolle)
                 .hasSize(1);
     }

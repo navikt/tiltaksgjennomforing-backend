@@ -1,12 +1,5 @@
 package no.nav.tag.tiltaksgjennomforing.varsel;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
-
 import no.nav.tag.tiltaksgjennomforing.Miljø;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avslagsårsak;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
@@ -19,6 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -41,13 +39,9 @@ public class VarslbarHendelseTest {
         avtaleRepository.save(avtale);
 
         List<Varsel> varsler = varselService.varslerForAvtale(TestData.enVeileder(avtale), avtale.getId());
-        assertThat(varsler).extracting("varslbarHendelseType").contains(VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT);
 
-        Varsel varselTekst = varsler.stream().filter(elem -> elem.getVarslbarHendelseType().equals(VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT)).collect(Collector.of(Varsel::new))
-        assertThat(varselTekst).contains(Avslagsårsak.FEIL_I_PROSENTSATS, Avslagsårsak.FEIL_I_FAKTA.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_REGELFORSTÅELSE.getTekst().toLowerCase());
+        String varselTekst = varsler.stream().filter(elem -> elem.getVarslbarHendelseType() == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT).findFirst().orElseThrow().getVarslingstekst();
+        assertThat(varselTekst).contains(Avslagsårsak.FEIL_I_PROSENTSATS.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_FAKTA.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_REGELFORSTÅELSE.getTekst().toLowerCase());
         assertThat(varselTekst).contains(avslagsforklaring);
     }
-
-
-
 }
