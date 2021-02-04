@@ -48,17 +48,18 @@ public class LagVarselFraVarslbarHendelseTest {
 
     private static Stream<Arguments> provider() {
         return Stream.of(
+                of(TILSKUDDSPERIODE_GODKJENT, new GamleVerdier(), List.of(veileder)),
                 of(TILSKUDDSPERIODE_AVSLATT, new GamleVerdier(), List.of(veileder)),
-                of(OPPRETTET, new GamleVerdier(), List.of(deltaker, arbeidsgiver)),
-                of(ENDRET, new GamleVerdier(), List.of()),
-                of(GODKJENT_AV_DELTAKER, new GamleVerdier(), List.of(veileder)),
-                of(GODKJENT_AV_ARBEIDSGIVER, new GamleVerdier(), List.of(veileder)),
-                of(GODKJENT_AV_VEILEDER, new GamleVerdier(), List.of(deltaker, arbeidsgiver)),
-                of(GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER, new GamleVerdier(true, false), List.of(deltaker, veileder)),
-                of(GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER, new GamleVerdier(false, false), List.of(veileder)),
-                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(true, false), List.of(deltaker)),
-                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(false, true), List.of(arbeidsgiver)),
-                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(true, true), List.of(deltaker, arbeidsgiver)),
+                of(OPPRETTET, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
+                of(ENDRET, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENT_AV_DELTAKER, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENT_AV_ARBEIDSGIVER, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENT_AV_VEILEDER, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER, new GamleVerdier(true, false), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER, new GamleVerdier(false, false), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(true, false), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(false, true), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(true, true), List.of(deltaker, arbeidsgiver, veileder)),
                 of(DELT_MED_ARBEIDSGIVER, new GamleVerdier(), List.of()),
                 of(DELT_MED_DELTAKER, new GamleVerdier(), List.of())
         );
