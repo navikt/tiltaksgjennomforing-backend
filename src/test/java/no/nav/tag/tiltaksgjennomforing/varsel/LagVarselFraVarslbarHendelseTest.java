@@ -31,37 +31,37 @@ public class LagVarselFraVarslbarHendelseTest {
         veileder = avtale.getVeilederNavIdent();
         gjeldendeperiode = avtale.gjeldendeTilskuddsperiode();
         avtale.avslåTilskuddsperiode(TestData.enNavIdent(), EnumSet.of(Avslagsårsak.FEIL_I_REGELFORSTÅELSE), "registrert feil i fakta");
-
     }
 
     @DisplayName("Skal varsle riktig mottakere når hendelse oppstår")
     @ParameterizedTest(name = "{0}")
     @MethodSource("provider")
-    void testLagBjelleVarsler(VarslbarHendelseType hendelse, GamleVerdier gamleVerdier, List<Identifikator> skalVarsles) {
+    void testLagVarsler(VarslbarHendelseType hendelse, GamleVerdier gamleVerdier, List<Identifikator> skalVarsles, List<Identifikator> skalFåLogg) {
 
-        List<Varsel> bjelleVarsler = LagVarselFraVarslbarHendelse.lagBjelleVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse), gamleVerdier);
-        assertThat(bjelleVarsler).extracting("identifikator").containsOnlyElementsOf(skalVarsles);
-        if (!bjelleVarsler.isEmpty()) {
-             assertThat(bjelleVarsler).extracting("varslbarHendelseType").containsOnly(hendelse);
+        List<Varsel> varsler = LagVarselFraVarslbarHendelse.lagBjelleVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse), gamleVerdier);
+        assertThat(varsler).filteredOn(varsel -> varsel.getVarslbarStatus() == VarslbarStatus.VARSEL).extracting(Varsel::getIdentifikator).containsAll(skalVarsles);
+        assertThat(varsler).filteredOn(varsel -> varsel.getVarslbarStatus() == VarslbarStatus.LOGG).extracting(Varsel::getIdentifikator).containsAll(skalFåLogg);
+        if (!varsler.isEmpty()) {
+             assertThat(varsler).extracting(Varsel::getVarslbarHendelseType).containsOnly(hendelse);
         }
     }
 
     private static Stream<Arguments> provider() {
         return Stream.of(
-                of(TILSKUDDSPERIODE_GODKJENT, new GamleVerdier(), List.of(veileder)),
-                of(TILSKUDDSPERIODE_AVSLATT, new GamleVerdier(), List.of(veileder)),
-                of(OPPRETTET, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
-                of(ENDRET, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
-                of(GODKJENT_AV_DELTAKER, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
-                of(GODKJENT_AV_ARBEIDSGIVER, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
-                of(GODKJENT_AV_VEILEDER, new GamleVerdier(), List.of(deltaker, arbeidsgiver, veileder)),
-                of(GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER, new GamleVerdier(true, false), List.of(deltaker, arbeidsgiver, veileder)),
-                of(GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER, new GamleVerdier(false, false), List.of(deltaker, arbeidsgiver, veileder)),
-                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(true, false), List.of(deltaker, arbeidsgiver, veileder)),
-                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(false, true), List.of(deltaker, arbeidsgiver, veileder)),
-                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(true, true), List.of(deltaker, arbeidsgiver, veileder)),
-                of(DELT_MED_ARBEIDSGIVER, new GamleVerdier(), List.of()),
-                of(DELT_MED_DELTAKER, new GamleVerdier(), List.of())
+                of(TILSKUDDSPERIODE_GODKJENT, new GamleVerdier(), List.of(veileder), List.of()),
+                of(TILSKUDDSPERIODE_AVSLATT, new GamleVerdier(), List.of(veileder), List.of()),
+                of(OPPRETTET, new GamleVerdier(), List.of(deltaker, arbeidsgiver), List.of(veileder)),
+                of(ENDRET, new GamleVerdier(), List.of(), List.of(deltaker, arbeidsgiver, veileder)),
+                of(GODKJENT_AV_DELTAKER, new GamleVerdier(), List.of(veileder), List.of(deltaker, arbeidsgiver)),
+                of(GODKJENT_AV_ARBEIDSGIVER, new GamleVerdier(), List.of(veileder), List.of(deltaker, arbeidsgiver)),
+                of(GODKJENT_AV_VEILEDER, new GamleVerdier(), List.of(deltaker, arbeidsgiver), List.of(veileder)),
+                of(GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER, new GamleVerdier(true, false), List.of(deltaker, veileder), List.of(arbeidsgiver)),
+                of(GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER, new GamleVerdier(false, false), List.of(veileder), List.of(deltaker, arbeidsgiver)),
+                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(true, false), List.of(deltaker), List.of(arbeidsgiver, veileder)),
+                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(false, true), List.of(arbeidsgiver), List.of(deltaker, veileder)),
+                of(GODKJENNINGER_OPPHEVET_AV_VEILEDER, new GamleVerdier(true, true), List.of(deltaker, arbeidsgiver), List.of(veileder)),
+                of(DELT_MED_ARBEIDSGIVER, new GamleVerdier(), List.of(), List.of()),
+                of(DELT_MED_DELTAKER, new GamleVerdier(), List.of(), List.of())
         );
     }
 }
