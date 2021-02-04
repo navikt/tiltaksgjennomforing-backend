@@ -22,19 +22,18 @@ public class BjelleVarselController {
     private final InnloggingService innloggingService;
     private final BjelleVarselService bjelleVarselService;
 
-    @GetMapping
-    public Iterable<BjelleVarsel> hentVarsler(
-            @RequestParam(value = "avtaleId", required = false) UUID avtaleId,
-            @RequestParam(value = "lest", required = false) Boolean lest, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
+    @GetMapping // oversikt . Trenger ikke avtaleId.
+    public Iterable<Varsel> hentVarsler(
+        @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        return bjelleVarselService.varslerForAvtaleparten(avtalepart, avtaleId, lest);
+        return bjelleVarselService.varslerForOversikt(avtalepart);
     }
 
     @GetMapping("/logg-varsler")
-    public List<BjelleVarsel> hentLoggVarsler(
-            @RequestParam(value = "avtaleId", required = false) UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
+    public List<Varsel> hentLoggVarsler(
+            @RequestParam(value = "avtaleId") UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        return bjelleVarselService.loggVarslerAvtaleParten(avtalepart, avtaleId);
+        return bjelleVarselService.varslerForAvtale(avtalepart, avtaleId);
     }
 
     @PostMapping("{varselId}/sett-til-lest")
