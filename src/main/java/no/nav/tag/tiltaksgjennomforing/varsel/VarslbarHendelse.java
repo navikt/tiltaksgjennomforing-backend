@@ -9,6 +9,8 @@ import no.nav.tag.tiltaksgjennomforing.varsel.events.VarslbarHendelseOppstaatt;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,6 +23,7 @@ public class VarslbarHendelse extends AbstractAggregateRoot<VarslbarHendelse> {
     private UUID id;
     private LocalDateTime tidspunkt;
     private UUID avtaleId;
+    @Enumerated(EnumType.STRING)
     private VarslbarHendelseType varslbarHendelseType;
 
     public static VarslbarHendelse nyHendelse(Avtale avtale, VarslbarHendelseType varslbarHendelseType, Avtalerolle utførtAv) {
