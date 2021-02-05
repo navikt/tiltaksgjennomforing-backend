@@ -28,19 +28,14 @@ public class VarselController {
     public Iterable<Varsel> hentVarsler(
         @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        AvtalePredicate avtalePredicate = new AvtalePredicate();
-        avtalePredicate.setVeilederNavIdent(new NavIdent(avtalepart.getIdentifikator().asString()));
-        List<Avtale> avtaler = avtalepart.hentAlleAvtalerMedLesetilgang(avtaleRepository, avtalePredicate);
-        Set<UUID> avtaleId = avtaler.stream().map(avtale -> avtale.getId()).collect(Collectors.toSet());
-        return varselService.varslerForOversikt(innloggetPart, avtaleId);
+        return varselService.varslerForOversikt(avtalepart.getIdentifikator());
     }
 
     @GetMapping("/logg-varsler")
     public List<Varsel> hentLoggVarsler(
             @RequestParam(value = "avtaleId") UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        avtalepart.hentAvtale(avtaleRepository, avtaleId);
-        return varselService.varslerForAvtale(avtaleId, innloggetPart);
+        return varselService.varslerForAvtale(avtaleId, avtalepart.getIdentifikator());
     }
 
     @PostMapping("{varselId}/sett-til-lest")

@@ -25,6 +25,8 @@ public interface  VarselRepository extends JpaRepository<Varsel, UUID> {
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
     List<Varsel> findAllByAvtaleIdAndMottaker(UUID avtaleId, Avtalerolle mottaker);
 
+    @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
+    List<Varsel> findAllByAvtaleIdAndIdentifikator(UUID avtaleId, Identifikator identifikator);
 
     @Transactional
     @Modifying()
@@ -38,7 +40,7 @@ public interface  VarselRepository extends JpaRepository<Varsel, UUID> {
     List<Varsel> findAllByIdentifikatorAndVarslbarStatus(Identifikator identifikator, VarslbarStatus varslbarStatus);
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
-    List<Varsel> findAllByLestIsFalseAndAndIdentifikatorAndVarslbarStatus(Identifikator identifikator, VarslbarStatus varslbarStatus);
+    List<Varsel> findAllByLestIsFalseAndIdentifikatorAndVarslbarStatus(Identifikator identifikator, VarslbarStatus varslbarStatus);
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
     List<Varsel> findAllByLestIsFalseAndVarslbarStatusAndMottakerAndAvtaleIdIn(VarslbarStatus varslbarStatus, Avtalerolle mottaker, Set<UUID> avtaleId);

@@ -36,12 +36,12 @@ public class VarselService {
                 });
     }
 
-    public List<Varsel> varslerForAvtale(UUID avtaleId, Avtalerolle innloggetPart) {
-        return varselRepository.findAllByAvtaleIdAndMottaker(avtaleId, innloggetPart);
+    public List<Varsel> varslerForAvtale(UUID avtaleId, Identifikator identifikator) {
+        return varselRepository.findAllByAvtaleIdAndIdentifikator(avtaleId, identifikator);
     }
 
-    public List<Varsel> varslerForOversikt(Avtalerolle avtalerolle, Set<UUID> avtaleId) {
-        return varselRepository.findAllByLestIsFalseAndVarslbarStatusAndMottakerAndAvtaleIdIn(VarslbarStatus.VARSEL, avtalerolle, avtaleId);
+    public List<Varsel> varslerForOversikt(Identifikator identifikator) {
+        return varselRepository.findAllByLestIsFalseAndIdentifikatorAndVarslbarStatus(identifikator, VarslbarStatus.VARSEL);
     }
 
     public void overtaVarslerTilAvtale(Identifikator identifikator, UUID avtaleId, Identifikator identifikatorGammelVeileder) {
