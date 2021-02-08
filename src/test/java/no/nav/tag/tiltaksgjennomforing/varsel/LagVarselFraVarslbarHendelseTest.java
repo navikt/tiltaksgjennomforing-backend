@@ -39,10 +39,10 @@ public class LagVarselFraVarslbarHendelseTest {
     void testLagVarsler(VarslbarHendelseType hendelse, GamleVerdier gamleVerdier, List<Identifikator> skalVarsles, List<Identifikator> skalFåLogg) {
 
         List<Varsel> varsler = LagVarselFraVarslbarHendelse.lagBjelleVarsler(avtale, VarslbarHendelse.nyHendelse(avtale, hendelse, Avtalerolle.VEILEDER), gamleVerdier, Avtalerolle.VEILEDER);
-        assertThat(varsler).filteredOn(varsel -> varsel.getVarslbarStatus() == VarslbarStatus.VARSEL).extracting(Varsel::getIdentifikator).containsAll(skalVarsles);
-        assertThat(varsler).filteredOn(varsel -> varsel.getVarslbarStatus() == VarslbarStatus.LOGG).extracting(Varsel::getIdentifikator).containsAll(skalFåLogg);
+        assertThat(varsler).filteredOn(varsel -> varsel.isBjelle()).extracting(Varsel::getIdentifikator).containsAll(skalVarsles);
+        assertThat(varsler).filteredOn(varsel -> !varsel.isBjelle()).extracting(Varsel::getIdentifikator).containsAll(skalFåLogg);
         if (!varsler.isEmpty()) {
-             assertThat(varsler).extracting(Varsel::getVarslbarHendelseType).containsOnly(hendelse);
+             assertThat(varsler).extracting(Varsel::getHendelseType).containsOnly(hendelse);
         }
     }
 

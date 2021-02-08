@@ -37,7 +37,7 @@ public class VarslbarHendelseTest {
 
         List<Varsel> varsler = varselService.varslerForAvtale(avtale.getId(), avtale.getVeilederNavIdent());
 
-        String varselTekst = varsler.stream().filter(elem -> elem.getVarslbarHendelseType() == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT).findFirst().orElseThrow().getVarslingstekst();
+        String varselTekst = varsler.stream().filter(elem -> elem.getHendelseType() == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT).findFirst().orElseThrow().getTekst();
         assertThat(varselTekst).contains(Avslagsårsak.FEIL_I_PROSENTSATS.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_FAKTA.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_REGELFORSTÅELSE.getTekst().toLowerCase());
         assertThat(varselTekst).contains(avslagsforklaring);
     }

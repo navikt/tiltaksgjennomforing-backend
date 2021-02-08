@@ -41,7 +41,7 @@ public class VarselService {
     }
 
     public List<Varsel> varslerForOversikt(Identifikator identifikator) {
-        return varselRepository.findAllByLestIsFalseAndIdentifikatorAndVarslbarStatus(identifikator, VarslbarStatus.VARSEL);
+        return varselRepository.findAllByLestIsFalseAndIdentifikatorAndBjelleIsTrue(identifikator);
     }
 
     public void overtaVarslerTilAvtale(Identifikator identifikator, UUID avtaleId, Identifikator identifikatorGammelVeileder) {

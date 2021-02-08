@@ -23,12 +23,11 @@ public class Varsel extends AbstractAggregateRoot<Varsel> {
     private boolean lest;
     @Convert(converter = IdentifikatorConverter.class)
     private Identifikator identifikator;
-    private String varslingstekst;
+    private String tekst;
     @Enumerated(EnumType.STRING)
-    private VarslbarHendelseType varslbarHendelseType;
-    @Enumerated(EnumType.STRING)
-    private VarslbarStatus varslbarStatus;
-    private UUID varslbarHendelse;
+    private VarslbarHendelseType hendelseType;
+    private boolean bjelle;
+
     private UUID avtaleId;
     private LocalDateTime tidspunkt;
     @Enumerated(EnumType.STRING)
@@ -61,11 +60,10 @@ public class Varsel extends AbstractAggregateRoot<Varsel> {
         varsel.id = UUID.randomUUID();
         varsel.tidspunkt = LocalDateTime.now();
         varsel.identifikator = identifikator;
-        varsel.varslbarHendelse = varslbarHendelse.getId();
-        varsel.varslingstekst = getVarslbarHendelseTekst(varslbarHendelse, avtale);
-        varsel.varslbarHendelseType = varslbarHendelse.getVarslbarHendelseType();
+        varsel.tekst = getVarslbarHendelseTekst(varslbarHendelse, avtale);
+        varsel.hendelseType = varslbarHendelse.getVarslbarHendelseType();
         varsel.avtaleId = varslbarHendelse.getAvtaleId();
-        varsel.varslbarStatus = varslbarStatus;
+        varsel.bjelle = varslbarStatus == VarslbarStatus.VARSEL;
         varsel.mottaker = mottaker;
         varsel.utførtAv = utførtAv;
         return varsel;
