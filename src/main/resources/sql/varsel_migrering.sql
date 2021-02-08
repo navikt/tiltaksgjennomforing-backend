@@ -146,16 +146,55 @@ FROM AVTALE WHERE AVBRUTT = true;
 
 -- LÅST_OPP
 INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
-SELECT gen_random_uuid (), true, (select veileder_nav_ident from avtale where avtale.id = varslbar_hendelse.avtale_id), 'Avtale låst opp av veileder', AVTALE_ID, VARSLBAR_HENDELSE_TYPE, TIDSPUNKT, false, 'VEILEDER', 'VEILEDER'
-FROM VARSLBAR_HENDELSE WHERE VARSLBAR_HENDELSE_TYPE = 'LÅST_OPP';
+SELECT random_uuid (), true, (select deltaker_fnr from avtale where avtale.id = ai1.avtale), 'Avtale låst opp av veileder', ai1.AVTALE, 'LÅST_OPP', (select ai2.godkjent_av_veileder from avtale_innhold ai2 where ai2.avtale = ai1.avtale and ai2.versjon = ai1.versjon - 1), true, 'VEILEDER', 'DELTAKER'
+FROM AVTALE_INNHOLD ai1 WHERE ai1.VERSJON > 1;
 
 INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
-SELECT gen_random_uuid (), true, (select bedrift_nr from avtale where avtale.id = varslbar_hendelse.avtale_id), 'Avtale låst opp av veileder', AVTALE_ID, VARSLBAR_HENDELSE_TYPE, TIDSPUNKT, true, 'VEILEDER', 'ARBEIDSGIVER'
-FROM VARSLBAR_HENDELSE WHERE VARSLBAR_HENDELSE_TYPE = 'LÅST_OPP';
+SELECT random_uuid (), true, (select bedrift_nr from avtale where avtale.id = ai1.avtale), 'Avtale låst opp av veileder', ai1.AVTALE, 'LÅST_OPP', (select ai2.godkjent_av_veileder from avtale_innhold ai2 where ai2.avtale = ai1.avtale and ai2.versjon = ai1.versjon - 1), true, 'VEILEDER', 'ARBEIDSGIVER'
+FROM AVTALE_INNHOLD ai1 WHERE ai1.VERSJON > 1;
 
 INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
-SELECT gen_random_uuid (), true, (select bedrift_nr from avtale where avtale.id = varslbar_hendelse.avtale_id), 'Avtale låst opp av veileder', AVTALE_ID, VARSLBAR_HENDELSE_TYPE, TIDSPUNKT, true, 'VEILEDER', 'DELTAKER'
-FROM VARSLBAR_HENDELSE WHERE VARSLBAR_HENDELSE_TYPE = 'LÅST_OPP';
+SELECT random_uuid (), true, (select veileder_nav_ident from avtale where avtale.id = ai1.avtale), 'Avtale låst opp av veileder', ai1.AVTALE, 'LÅST_OPP', (select ai2.godkjent_av_veileder from avtale_innhold ai2 where ai2.avtale = ai1.avtale and ai2.versjon = ai1.versjon - 1), false, 'VEILEDER', 'VEILEDER'
+FROM AVTALE_INNHOLD ai1 WHERE ai1.VERSJON > 1;
 ------------------------------------------
 
 -- GJENOPPRETTET
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select veileder_nav_ident from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale gjenopprettet', AVTALE_ID, HENDELSE, TIDSPUNKT, false, 'VEILEDER', 'VEILEDER'
+FROM hendelselogg WHERE hendelse = 'GJENOPPRETTET';
+
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select bedrift_nr from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale gjenopprettet', AVTALE_ID, HENDELSE, TIDSPUNKT, true, 'VEILEDER', 'ARBEIDSGIVER'
+FROM hendelselogg WHERE hendelse = 'GJENOPPRETTET';
+
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select deltaker_fnr from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale gjenopprettet', AVTALE_ID, HENDELSE, TIDSPUNKT, true, 'VEILEDER', 'DELTAKER'
+FROM hendelselogg WHERE hendelse = 'GJENOPPRETTET';
+--------------------------------------------
+
+-- NY_VEILEDER
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select veileder_nav_ident from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale tildelt ny veileder', AVTALE_ID, HENDELSE, TIDSPUNKT, false, 'VEILEDER', 'VEILEDER'
+FROM hendelselogg WHERE hendelse = 'NY_VEILEDER';
+
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select bedrift_nr from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale tildelt ny veileder', AVTALE_ID, HENDELSE, TIDSPUNKT, true, 'VEILEDER', 'ARBEIDSGIVER'
+FROM hendelselogg WHERE hendelse = 'NY_VEILEDER';
+
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select deltaker_fnr from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale tildelt ny veileder', AVTALE_ID, HENDELSE, TIDSPUNKT, true, 'VEILEDER', 'DELTAKER'
+FROM hendelselogg WHERE hendelse = 'NY_VEILEDER';
+--------------------------------------------
+
+-- AVTALE_FORDELT
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select veileder_nav_ident from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale tildelt veileder', AVTALE_ID, HENDELSE, TIDSPUNKT, false, 'VEILEDER', 'VEILEDER'
+FROM hendelselogg WHERE hendelse = 'AVTALE_FORDELT';
+
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select bedrift_nr from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale tildelt veileder', AVTALE_ID, HENDELSE, TIDSPUNKT, true, 'VEILEDER', 'ARBEIDSGIVER'
+FROM hendelselogg WHERE hendelse = 'AVTALE_FORDELT';
+
+INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
+SELECT gen_random_uuid (), true, (select deltaker_fnr from avtale where avtale.id = hendelselogg.avtale_id), 'Avtale tildelt veileder', AVTALE_ID, HENDELSE, TIDSPUNKT, true, 'VEILEDER', 'DELTAKER'
+FROM hendelselogg WHERE hendelse = 'AVTALE_FORDELT';

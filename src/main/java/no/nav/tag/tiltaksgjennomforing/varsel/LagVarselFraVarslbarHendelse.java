@@ -3,7 +3,6 @@ package no.nav.tag.tiltaksgjennomforing.varsel;
 import lombok.RequiredArgsConstructor;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
-import no.nav.tag.tiltaksgjennomforing.avtale.events.AvtaleOpprettetAvArbeidsgiver;
 import no.nav.tag.tiltaksgjennomforing.avtale.events.GamleVerdier;
 import no.nav.tag.tiltaksgjennomforing.varsel.events.VarslbarHendelseOppstaatt;
 import org.springframework.context.event.EventListener;
@@ -53,6 +52,7 @@ public class LagVarselFraVarslbarHendelse {
         switch (varslbarHendelse.getVarslbarHendelseType()) {
             case OPPRETTET:
             case GODKJENT_AV_VEILEDER:
+            case GJENOPPRETTET:
                 return List.of(factory.deltaker(VARSEL), factory.arbeidsgiver(VARSEL), factory.veileder(LOGG));
             case GODKJENT_AV_DELTAKER:
             case GODKJENT_AV_ARBEIDSGIVER:
@@ -73,6 +73,10 @@ public class LagVarselFraVarslbarHendelse {
             case NY_VEILEDER:
             case AVTALE_FORDELT:
                 return List.of(factory.arbeidsgiver(LOGG), factory.deltaker(LOGG), factory.veileder(LOGG));
+            case DELT_MED_DELTAKER:
+            case DELT_MED_ARBEIDSGIVER:
+                return List.of(factory.veileder(LOGG));
+
         }
         return Collections.emptyList();
     }
