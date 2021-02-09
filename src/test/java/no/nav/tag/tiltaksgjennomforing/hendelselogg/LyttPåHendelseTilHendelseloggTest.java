@@ -2,6 +2,7 @@ package no.nav.tag.tiltaksgjennomforing.hendelselogg;
 
 import no.nav.tag.tiltaksgjennomforing.Miljø;
 import no.nav.tag.tiltaksgjennomforing.avtale.*;
+import no.nav.tag.tiltaksgjennomforing.varsel.VarselRepository;
 import no.nav.tag.tiltaksgjennomforing.varsel.VarslbarHendelseType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,10 +29,13 @@ class LyttPåHendelseTilHendelseloggTest {
     AvtaleRepository avtaleRepository;
     @Autowired
     HendelseloggRepository hendelseloggRepository;
+    @Autowired
+    VarselRepository varselRepository;
 
     @BeforeEach
     public void setup() {
         hendelseloggRepository.deleteAll();
+        varselRepository.deleteAll();
         avtaleRepository.deleteAll();
     }
 

@@ -7,7 +7,6 @@ import no.nav.tag.tiltaksgjennomforing.autorisasjon.InnloggingService;
 import no.nav.tag.tiltaksgjennomforing.enhet.VeilarbArenaClient;
 import no.nav.tag.tiltaksgjennomforing.exceptions.RessursFinnesIkkeException;
 import no.nav.tag.tiltaksgjennomforing.orgenhet.EregService;
-import no.nav.tag.tiltaksgjennomforing.varsel.VarselService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,6 @@ public class AvtaleController {
 
     private final AvtaleRepository avtaleRepository;
     private final InnloggingService innloggingService;
-    private final VarselService varselService;
     private final EregService eregService;
     private final VeilarbArenaClient veilarbArenaClient;
 
@@ -171,9 +169,7 @@ public class AvtaleController {
     public void settNyVeilederPåAvtale(@PathVariable("avtaleId") UUID avtaleId) {
         Veileder veileder = innloggingService.hentVeileder();
         Avtale avtale = avtaleRepository.findById(avtaleId).orElseThrow(RessursFinnesIkkeException::new);
-        NavIdent veilederNavIdent = avtale.getVeilederNavIdent();
         veileder.overtaAvtale(avtale);
-        varselService.overtaVarslerTilAvtale(veileder.getIdentifikator(), avtaleId, veilederNavIdent);
         avtaleRepository.save(avtale);
     }
 

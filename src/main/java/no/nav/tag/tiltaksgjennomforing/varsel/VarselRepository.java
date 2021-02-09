@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,21 +21,11 @@ public interface  VarselRepository extends JpaRepository<Varsel, UUID> {
     List<Varsel> findAll();
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
-    List<Varsel> findAllByTidspunktAfter(LocalDateTime tidspunkt);
-
-    @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
-    List<Varsel> findAllByAvtaleIdAndMottaker(UUID avtaleId, Avtalerolle mottaker);
+    Optional<Varsel> findByIdAndIdentifikator(UUID varselId, Identifikator identifikator);
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
     List<Varsel> findAllByAvtaleIdAndIdentifikator(UUID avtaleId, Identifikator identifikator);
 
-    @Transactional
-    @Modifying()
-    @Query(value = "UPDATE Varsel v SET v.identifikator = :identifikator WHERE (v.avtaleId = :avtaleId AND v.identifikator = :identifikatorGammelVeileder) OR (v.avtaleId = :avtaleId AND v.identifikator is null)")
-    void updateVeilederIdentifikator(@Param("identifikator") Identifikator identifikator, @Param("avtaleId") UUID avtaleId, @Param("identifikatorGammelVeileder") Identifikator identifikatorGammelVeileder);
-
-
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
-    List<Varsel> findAllByLestIsFalseAndIdentifikatorAndBjelleIsTrue(Identifikator identifikator);
-
+    List<Varsel> findAllByLestIsFalseAndBjelleIsTrueAndIdentifikator(Identifikator identifikator);
 }

@@ -176,6 +176,7 @@ public class Veileder extends Avtalepart<NavIdent> {
     }
 
     public void overtaAvtale(Avtale avtale) {
+        sjekkTilgang(avtale);
         if (this.getIdentifikator().equals(avtale.getVeilederNavIdent())) {
             throw new ErAlleredeVeilederException();
         }

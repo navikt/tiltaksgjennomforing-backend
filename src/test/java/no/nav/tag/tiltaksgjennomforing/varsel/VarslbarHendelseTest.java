@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VarslbarHendelseTest {
 
     @Autowired
-    VarselService varselService;
+    VarselRepository varselRepository;
     @Autowired
     AvtaleRepository avtaleRepository;
 
     @Test
-    public void sjekk_at_alle_avslagsgrunner_og_forklaring_er_i_varslbarhendelse() {
+    public void sjekk_at_alle_avslagsgrunner_og_forklaring_er_i_varseltekst() {
         EnumSet<Avslagsårsak> avslagsårsaker = EnumSet.of(Avslagsårsak.FEIL_I_PROSENTSATS, Avslagsårsak.FEIL_I_FAKTA, Avslagsårsak.FEIL_I_REGELFORSTÅELSE);
         String avslagsforklaring = "Masse feil";
 
@@ -35,7 +35,7 @@ public class VarslbarHendelseTest {
         avtale.avslåTilskuddsperiode(TestData.enNavIdent(), avslagsårsaker, avslagsforklaring);
         avtaleRepository.save(avtale);
 
-        List<Varsel> varsler = varselService.varslerForAvtale(avtale.getId(), avtale.getVeilederNavIdent());
+        List<Varsel> varsler = varselRepository.findAllByAvtaleIdAndIdentifikator(avtale.getId(), avtale.getVeilederNavIdent());
 
         String varselTekst = varsler.stream().filter(elem -> elem.getHendelseType() == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT).findFirst().orElseThrow().getTekst();
         assertThat(varselTekst).contains(Avslagsårsak.FEIL_I_PROSENTSATS.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_FAKTA.getTekst().toLowerCase(), Avslagsårsak.FEIL_I_REGELFORSTÅELSE.getTekst().toLowerCase());
