@@ -27,7 +27,6 @@ public class Varsel extends AbstractAggregateRoot<Varsel> {
     @Enumerated(EnumType.STRING)
     private VarslbarHendelseType hendelseType;
     private boolean bjelle;
-
     private UUID avtaleId;
     private LocalDateTime tidspunkt;
     @Enumerated(EnumType.STRING)

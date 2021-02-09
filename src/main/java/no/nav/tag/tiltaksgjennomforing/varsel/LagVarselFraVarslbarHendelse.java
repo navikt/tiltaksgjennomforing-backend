@@ -20,7 +20,7 @@ import static no.nav.tag.tiltaksgjennomforing.varsel.VarslbarStatus.VARSEL;
 public class LagVarselFraVarslbarHendelse {
     private final VarselRepository varselRepository;
 
-    static List<Varsel> lagVarslerGodkjenningerOpphevetArbeidsgiver (boolean erGodkjentAvDeltaker, VarselFactory factory) {
+    static List<Varsel> lagVarslerGodkjenningerOpphevetArbeidsgiver(boolean erGodkjentAvDeltaker, VarselFactory factory) {
         var varslinger = new ArrayList<Varsel>();
         if (erGodkjentAvDeltaker) {
             varslinger.add(factory.deltaker(VARSEL));
@@ -28,7 +28,7 @@ public class LagVarselFraVarslbarHendelse {
 
         varslinger.add(factory.arbeidsgiver(LOGG));
         varslinger.add(factory.veileder(VARSEL));
-        return  varslinger;
+        return varslinger;
     }
 
     static List<Varsel> lagVarslerGodkjenningerOpphevetVeileder(GamleVerdier gamleVerdier, VarselFactory factory) {

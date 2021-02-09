@@ -84,4 +84,21 @@ public class VarslbarHendelseLytter {
     public void fordelt(AvtaleOpprettetAvArbeidsgiverErFordelt event) {
         varslbarHendelseRepository.save(VarslbarHendelse.nyHendelse(event.getAvtale(), VarslbarHendelseType.AVTALE_FORDELT, Avtalerolle.VEILEDER));
     }
+
+    @EventListener
+    public void avbrutt(AvbruttAvVeileder event) {
+        varslbarHendelseRepository.save(VarslbarHendelse.nyHendelse(event.getAvtale(), VarslbarHendelseType.AVBRUTT, Avtalerolle.VEILEDER));
+    }
+
+    @EventListener
+    public void låstOpp(AvtaleLåstOpp event) {
+        varslbarHendelseRepository.save(VarslbarHendelse.nyHendelse(event.getAvtale(), VarslbarHendelseType.LÅST_OPP, Avtalerolle.VEILEDER));
+    }
+
+    @EventListener
+    public void gjenopprettet(AvtaleGjenopprettet event) {
+        varslbarHendelseRepository.save(VarslbarHendelse.nyHendelse(event.getAvtale(), VarslbarHendelseType.GJENOPPRETTET, Avtalerolle.VEILEDER));
+    }
+
+
 }
