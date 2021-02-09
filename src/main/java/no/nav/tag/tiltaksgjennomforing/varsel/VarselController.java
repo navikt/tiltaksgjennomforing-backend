@@ -32,8 +32,15 @@ public class VarselController {
         return varselRepository.findAllByLestIsFalseAndBjelleIsTrueAndIdentifikatorIn(avtalepart.identifikatorer());
     }
 
-    @GetMapping("/avtale")
-    public List<Varsel> hentVarselloggForAvtale(
+    @GetMapping("/avtale-modal")
+    public List<Varsel> hentVarslerMedBjelleForAvtale(
+            @RequestParam(value = "avtaleId") UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
+        Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
+        return varselRepository.findAllByLestIsFalseAndBjelleIsTrueAndAvtaleIdAndIdentifikatorIn(avtaleId, avtalepart.identifikatorer());
+    }
+
+    @GetMapping("/avtale-logg")
+    public List<Varsel> hentAlleVarslerForAvtale(
             @RequestParam(value = "avtaleId") UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
         Avtale avtale = avtaleRepository.findById(avtaleId).orElseThrow();
@@ -45,7 +52,7 @@ public class VarselController {
     @Transactional
     public ResponseEntity<?> settTilLest(@PathVariable("varselId") UUID varselId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        Varsel varsel = varselRepository.findByIdAndIdentifikator(varselId, avtalepart.getIdentifikator()).orElseThrow();
+        Varsel varsel = varselRepository.findByIdAndIdentifikatorIn(varselId, avtalepart.identifikatorer());
         varsel.settTilLest();
         varselRepository.save(varsel);
         return ResponseEntity.ok().build();

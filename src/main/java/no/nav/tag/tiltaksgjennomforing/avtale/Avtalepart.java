@@ -100,7 +100,7 @@ public abstract class Avtalepart<T extends Identifikator> {
 
     public abstract InnloggetBruker innloggetBruker();
 
-    public Collection<Object> identifikatorer() {
+    public Collection<? extends Identifikator> identifikatorer() {
         return List.of(getIdentifikator());
     }
 
