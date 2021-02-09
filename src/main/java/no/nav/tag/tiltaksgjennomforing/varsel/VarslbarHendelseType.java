@@ -6,13 +6,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum VarslbarHendelseType {
-    OPPRETTET("Avtale er opprettet av NAV-veileder"),
+    OPPRETTET("Avtale er opprettet av veileder"),
     GODKJENT_AV_ARBEIDSGIVER("Avtale er godkjent av arbeidsgiver"),
-    GODKJENT_AV_VEILEDER("Avtale er godkjent av NAV-veileder"),
+    GODKJENT_AV_VEILEDER("Avtale er godkjent av veileder"),
     GODKJENT_AV_DELTAKER("Avtale er godkjent av deltaker"),
-    GODKJENT_PAA_VEGNE_AV("Avtale er godkjent av NAV-veileder"),
+    GODKJENT_PAA_VEGNE_AV("Avtalen ble godkjent på vegne av deltaker"),
     GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER("Avtalens godkjenninger er opphevet av arbeidsgiver"),
-    GODKJENNINGER_OPPHEVET_AV_VEILEDER("Avtalens godkjenninger er opphevet av NAV-veileder"),
+    GODKJENNINGER_OPPHEVET_AV_VEILEDER("Avtalens godkjenninger er opphevet av veileder"),
     DELT_MED_DELTAKER("Avtale delt med deltaker"),
     DELT_MED_ARBEIDSGIVER("Avtale delt med arbeidsgiver"),
     ENDRET("Avtale endret"),

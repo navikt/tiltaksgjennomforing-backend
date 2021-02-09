@@ -14,15 +14,15 @@ public class VarselFactory {
         this.utførtAv = utførtAv;
     }
 
-    public Varsel deltaker(VarslbarStatus niva) {
-        return Varsel.nyttVarsel(avtale.getDeltakerFnr(), hendelse, niva, avtale, Avtalerolle.DELTAKER, utførtAv);
+    public Varsel deltaker(boolean bjelle) {
+        return Varsel.nyttVarsel(avtale.getDeltakerFnr(), hendelse, bjelle, avtale, Avtalerolle.DELTAKER, utførtAv);
     }
 
-    public Varsel arbeidsgiver(VarslbarStatus niva) {
-        return Varsel.nyttVarsel(avtale.getBedriftNr(), hendelse, niva, avtale, Avtalerolle.ARBEIDSGIVER, utførtAv);
+    public Varsel arbeidsgiver(boolean bjelle) {
+        return Varsel.nyttVarsel(avtale.getBedriftNr(), hendelse, bjelle, avtale, Avtalerolle.ARBEIDSGIVER, utførtAv);
     }
 
-    public Varsel veileder(VarslbarStatus niva) {
-        return Varsel.nyttVarsel(avtale.getVeilederNavIdent(), hendelse, niva, avtale, Avtalerolle.VEILEDER, utførtAv);
+    public Varsel veileder(boolean bjelle) {
+        return Varsel.nyttVarsel(avtale.getVeilederNavIdent(), hendelse, bjelle, avtale, Avtalerolle.VEILEDER, utførtAv);
     }
 }

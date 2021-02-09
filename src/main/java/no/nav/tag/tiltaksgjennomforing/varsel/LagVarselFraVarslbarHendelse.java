@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static no.nav.tag.tiltaksgjennomforing.varsel.VarslbarStatus.LOGG;
-import static no.nav.tag.tiltaksgjennomforing.varsel.VarslbarStatus.VARSEL;
-
 @Component
 @RequiredArgsConstructor
 public class LagVarselFraVarslbarHendelse {
@@ -23,25 +20,25 @@ public class LagVarselFraVarslbarHendelse {
     static List<Varsel> lagVarslerGodkjenningerOpphevetArbeidsgiver(boolean erGodkjentAvDeltaker, VarselFactory factory) {
         var varslinger = new ArrayList<Varsel>();
         if (erGodkjentAvDeltaker) {
-            varslinger.add(factory.deltaker(VARSEL));
-        } else varslinger.add(factory.deltaker(LOGG));
+            varslinger.add(factory.deltaker(true));
+        } else varslinger.add(factory.deltaker(false));
 
-        varslinger.add(factory.arbeidsgiver(LOGG));
-        varslinger.add(factory.veileder(VARSEL));
+        varslinger.add(factory.arbeidsgiver(false));
+        varslinger.add(factory.veileder(true));
         return varslinger;
     }
 
     static List<Varsel> lagVarslerGodkjenningerOpphevetVeileder(GamleVerdier gamleVerdier, VarselFactory factory) {
         var varslinger = new ArrayList<Varsel>();
         if (gamleVerdier.isGodkjentAvDeltaker()) {
-            varslinger.add(factory.deltaker(VARSEL));
-        } else varslinger.add(factory.deltaker(LOGG));
+            varslinger.add(factory.deltaker(true));
+        } else varslinger.add(factory.deltaker(false));
 
         if (gamleVerdier.isGodkjentAvArbeidsgiver()) {
-            varslinger.add(factory.arbeidsgiver(VARSEL));
-        } else varslinger.add(factory.arbeidsgiver(LOGG));
+            varslinger.add(factory.arbeidsgiver(true));
+        } else varslinger.add(factory.arbeidsgiver(false));
 
-        varslinger.add(factory.veileder(LOGG));
+        varslinger.add(factory.veileder(false));
         return varslinger;
     }
 
@@ -53,15 +50,15 @@ public class LagVarselFraVarslbarHendelse {
             case OPPRETTET:
             case GODKJENT_AV_VEILEDER:
             case GJENOPPRETTET:
-                return List.of(factory.deltaker(VARSEL), factory.arbeidsgiver(VARSEL), factory.veileder(LOGG));
+                return List.of(factory.deltaker(true), factory.arbeidsgiver(true), factory.veileder(false));
             case GODKJENT_AV_DELTAKER:
             case GODKJENT_AV_ARBEIDSGIVER:
-                return List.of(factory.veileder(VARSEL), factory.arbeidsgiver(LOGG), factory.deltaker(LOGG));
+                return List.of(factory.veileder(true), factory.arbeidsgiver(false), factory.deltaker(false));
             case TILSKUDDSPERIODE_AVSLATT:
             case TILSKUDDSPERIODE_GODKJENT:
-                return List.of(factory.veileder(VARSEL));
+                return List.of(factory.veileder(true));
             case GODKJENT_PAA_VEGNE_AV:
-                return List.of(factory.arbeidsgiver(VARSEL), factory.deltaker(LOGG), factory.veileder(LOGG));
+                return List.of(factory.arbeidsgiver(true), factory.deltaker(false), factory.veileder(false));
             case GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER:
                 return lagVarslerGodkjenningerOpphevetArbeidsgiver(gamleVerdier.isGodkjentAvDeltaker(), factory);
             case GODKJENNINGER_OPPHEVET_AV_VEILEDER:
@@ -72,10 +69,10 @@ public class LagVarselFraVarslbarHendelse {
             case AVBRUTT:
             case NY_VEILEDER:
             case AVTALE_FORDELT:
-                return List.of(factory.arbeidsgiver(LOGG), factory.deltaker(LOGG), factory.veileder(LOGG));
+                return List.of(factory.arbeidsgiver(false), factory.deltaker(false), factory.veileder(false));
             case DELT_MED_DELTAKER:
             case DELT_MED_ARBEIDSGIVER:
-                return List.of(factory.veileder(LOGG));
+                return List.of(factory.veileder(false));
 
         }
         return Collections.emptyList();
