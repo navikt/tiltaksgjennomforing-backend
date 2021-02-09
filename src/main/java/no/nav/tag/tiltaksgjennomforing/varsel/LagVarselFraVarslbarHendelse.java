@@ -44,7 +44,7 @@ public class LagVarselFraVarslbarHendelse {
 
 
     static List<Varsel> lagBjelleVarsler(Avtale avtale, VarslbarHendelse varslbarHendelse, GamleVerdier gamleVerdier, Avtalerolle utførtAv) {
-        var factory = new VarselFactory(avtale, varslbarHendelse, utførtAv);
+        var factory = new VarselFactory(avtale, utførtAv, varslbarHendelse.getVarslbarHendelseType());
 
         switch (varslbarHendelse.getVarslbarHendelseType()) {
             case OPPRETTET:

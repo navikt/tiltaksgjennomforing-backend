@@ -46,21 +46,21 @@ public class Varsel extends AbstractAggregateRoot<Varsel> {
                 .concat(gjeldendePeriode.getAvslagsforklaring());
     }
 
-    private static String getVarslbarHendelseTekst(VarslbarHendelse varslbarHendelse, Avtale avtale) {
-        if (varslbarHendelse.getVarslbarHendelseType() == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT) {
-            return tilskuddsperiodeAvslåttTekst(avtale, varslbarHendelse.getVarslbarHendelseType().getTekst());
+    private static String getVarslbarHendelseTekst(Avtale avtale, VarslbarHendelseType hendelseType) {
+        if (hendelseType == VarslbarHendelseType.TILSKUDDSPERIODE_AVSLATT) {
+            return tilskuddsperiodeAvslåttTekst(avtale, hendelseType.getTekst());
         }
-        return varslbarHendelse.getVarslbarHendelseType().getTekst();
+        return hendelseType.getTekst();
     }
 
-    public static Varsel nyttVarsel(Identifikator identifikator, VarslbarHendelse varslbarHendelse, boolean bjelle, Avtale avtale, Avtalerolle mottaker, Avtalerolle utførtAv) {
+    public static Varsel nyttVarsel(Identifikator identifikator, boolean bjelle, Avtale avtale, Avtalerolle mottaker, Avtalerolle utførtAv, VarslbarHendelseType varslbarHendelseType, UUID avtaleId) {
         Varsel varsel = new Varsel();
         varsel.id = UUID.randomUUID();
         varsel.tidspunkt = LocalDateTime.now();
         varsel.identifikator = identifikator;
-        varsel.tekst = getVarslbarHendelseTekst(varslbarHendelse, avtale);
-        varsel.hendelseType = varslbarHendelse.getVarslbarHendelseType();
-        varsel.avtaleId = varslbarHendelse.getAvtaleId();
+        varsel.tekst = getVarslbarHendelseTekst(avtale, varslbarHendelseType);
+        varsel.hendelseType = varslbarHendelseType;
+        varsel.avtaleId = avtaleId;
         varsel.bjelle = bjelle;
         varsel.mottaker = mottaker;
         varsel.utførtAv = utførtAv;

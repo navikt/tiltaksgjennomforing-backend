@@ -112,7 +112,7 @@ FROM VARSLBAR_HENDELSE WHERE VARSLBAR_HENDELSE_TYPE = 'GODKJENNINGER_OPPHEVET_AV
 
 -- DELT_MED_DELTAKER
 INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
-SELECT gen_random_uuid (), true, (select deltaker_fnr from avtale where avtale.id = varslbar_hendelse.avtale_id), 'Avtale delt med deltaker', AVTALE_ID, VARSLBAR_HENDELSE_TYPE, TIDSPUNKT, false, 'VEILEDER', 'DELTAKER'
+SELECT gen_random_uuid (), true, (select deltaker_fnr from avtale where avtale.id = varslbar_hendelse.avtale_id), 'Avtale delt med deltaker', AVTALE_ID, VARSLBAR_HENDELSE_TYPE, TIDSPUNKT, true, 'VEILEDER', 'DELTAKER'
 FROM VARSLBAR_HENDELSE WHERE VARSLBAR_HENDELSE_TYPE = 'DELT_MED_DELTAKER';
 
 INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
@@ -122,7 +122,7 @@ FROM VARSLBAR_HENDELSE WHERE VARSLBAR_HENDELSE_TYPE = 'DELT_MED_DELTAKER';
 
 -- DELT_MED_ARBEIDSGIVER
 INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)
-SELECT gen_random_uuid (), true, (select deltaker_fnr from avtale where avtale.id = varslbar_hendelse.avtale_id), 'Avtale delt med arbeidsgiver', AVTALE_ID, VARSLBAR_HENDELSE_TYPE, TIDSPUNKT, false, 'VEILEDER', 'DELTAKER'
+SELECT gen_random_uuid (), true, (select deltaker_fnr from avtale where avtale.id = varslbar_hendelse.avtale_id), 'Avtale delt med arbeidsgiver', AVTALE_ID, VARSLBAR_HENDELSE_TYPE, TIDSPUNKT, false, 'VEILEDER', 'ARBEIDSGIVER'
 FROM VARSLBAR_HENDELSE WHERE VARSLBAR_HENDELSE_TYPE = 'DELT_MED_ARBEIDSGIVER';
 
 INSERT INTO varsel (ID, LEST, IDENTIFIKATOR, TEKST, AVTALE_ID, HENDELSE_TYPE, TIDSPUNKT, BJELLE, UTFØRT_AV, MOTTAKER)

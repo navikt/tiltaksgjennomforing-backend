@@ -41,7 +41,7 @@ public class VarselRepositoryTest {
     @Test
     public void save__lagrer_riktig() {
         avtale = TestData.enArbeidstreningAvtale();
-        Varsel varsel = Varsel.nyttVarsel(TestData.enIdentifikator(), varslbarHendelse, true, avtale, Avtalerolle.DELTAKER, Avtalerolle.VEILEDER);
+        Varsel varsel = Varsel.nyttVarsel(TestData.enIdentifikator(), varslbarHendelse, true, avtale, Avtalerolle.DELTAKER, Avtalerolle.VEILEDER, varslbarHendelse.getVarslbarHendelseType(), varslbarHendelse.getAvtaleId());
         Varsel lagretVarsel = varselRepository.save(varsel);
         assertThat(lagretVarsel).isEqualToIgnoringNullFields(varsel);
     }

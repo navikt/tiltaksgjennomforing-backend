@@ -28,4 +28,8 @@ public interface  VarselRepository extends JpaRepository<Varsel, UUID> {
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
     List<Varsel> findAllByLestIsFalseAndBjelleIsTrueAndAvtaleIdAndIdentifikatorIn(UUID avtaleId, Collection<Identifikator> identifikator);
+
+    default List<Varsel> saveAll(Varsel... varsler) {
+        return saveAll(List.of(varsler));
+    }
 }

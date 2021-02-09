@@ -3,26 +3,28 @@ package no.nav.tag.tiltaksgjennomforing.varsel;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
 
+import java.util.UUID;
+
 public class VarselFactory {
     private final Avtale avtale;
-    private final VarslbarHendelse hendelse;
     private final Avtalerolle utførtAv;
+    private final VarslbarHendelseType hendelseType;
 
-    public VarselFactory(Avtale avtale, VarslbarHendelse hendelse, Avtalerolle utførtAv) {
+    public VarselFactory(Avtale avtale, Avtalerolle utførtAv, VarslbarHendelseType hendelseType) {
         this.avtale = avtale;
-        this.hendelse = hendelse;
+        this.hendelseType = hendelseType;
         this.utførtAv = utførtAv;
     }
 
     public Varsel deltaker(boolean bjelle) {
-        return Varsel.nyttVarsel(avtale.getDeltakerFnr(), hendelse, bjelle, avtale, Avtalerolle.DELTAKER, utførtAv);
+        return Varsel.nyttVarsel(avtale.getDeltakerFnr(), bjelle, avtale, Avtalerolle.DELTAKER, utførtAv, hendelseType, avtale.getId());
     }
 
     public Varsel arbeidsgiver(boolean bjelle) {
-        return Varsel.nyttVarsel(avtale.getBedriftNr(), hendelse, bjelle, avtale, Avtalerolle.ARBEIDSGIVER, utførtAv);
+        return Varsel.nyttVarsel(avtale.getBedriftNr(), bjelle, avtale, Avtalerolle.ARBEIDSGIVER, utførtAv, hendelseType, avtale.getId());
     }
 
     public Varsel veileder(boolean bjelle) {
-        return Varsel.nyttVarsel(avtale.getVeilederNavIdent(), hendelse, bjelle, avtale, Avtalerolle.VEILEDER, utførtAv);
+        return Varsel.nyttVarsel(avtale.getVeilederNavIdent(), bjelle, avtale, Avtalerolle.VEILEDER, utførtAv, hendelseType, avtale.getId());
     }
 }
