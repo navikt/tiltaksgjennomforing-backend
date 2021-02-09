@@ -4,6 +4,8 @@ import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import no.nav.security.oidc.api.Protected;
 import no.nav.tag.tiltaksgjennomforing.autorisasjon.InnloggingService;
+import no.nav.tag.tiltaksgjennomforing.avtale.Avtale;
+import no.nav.tag.tiltaksgjennomforing.avtale.AvtaleRepository;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalepart;
 import no.nav.tag.tiltaksgjennomforing.avtale.Avtalerolle;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +23,22 @@ import java.util.UUID;
 public class VarselController {
     private final InnloggingService innloggingService;
     private final VarselRepository varselRepository;
+    private final AvtaleRepository avtaleRepository;
 
     @GetMapping("/oversikt")
     public List<Varsel> hentVarslerMedBjelleForOversikt(
             @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        return varselRepository.findAllByLestIsFalseAndBjelleIsTrueAndIdentifikator(avtalepart.getIdentifikator());
+        return varselRepository.findAllByLestIsFalseAndBjelleIsTrueAndIdentifikatorIn(avtalepart.identifikatorer());
     }
 
     @GetMapping("/avtale")
     public List<Varsel> hentVarselloggForAvtale(
             @RequestParam(value = "avtaleId") UUID avtaleId, @CookieValue("innlogget-part") Avtalerolle innloggetPart) {
         Avtalepart avtalepart = innloggingService.hentAvtalepart(innloggetPart);
-        return varselRepository.findAllByAvtaleIdAndIdentifikator(avtaleId, avtalepart.getIdentifikator());
+        Avtale avtale = avtaleRepository.findById(avtaleId).orElseThrow();
+        avtalepart.sjekkTilgang(avtale);
+        return varselRepository.findAllByAvtaleIdAndMottaker(avtaleId, innloggetPart);
     }
 
     @PostMapping("{varselId}/sett-til-lest")

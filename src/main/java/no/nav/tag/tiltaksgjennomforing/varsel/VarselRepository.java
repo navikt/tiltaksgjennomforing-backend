@@ -10,10 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public interface  VarselRepository extends JpaRepository<Varsel, UUID> {
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
@@ -27,5 +24,8 @@ public interface  VarselRepository extends JpaRepository<Varsel, UUID> {
     List<Varsel> findAllByAvtaleIdAndIdentifikator(UUID avtaleId, Identifikator identifikator);
 
     @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
-    List<Varsel> findAllByLestIsFalseAndBjelleIsTrueAndIdentifikator(Identifikator identifikator);
+    List<Varsel> findAllByAvtaleIdAndMottaker(UUID avtaleId, Avtalerolle mottaker);
+
+    @Timed(percentiles = { 0.5d, 0.75d, 0.9d, 0.99d, 0.999d })
+    List<Varsel> findAllByLestIsFalseAndBjelleIsTrueAndIdentifikatorIn(Collection<Identifikator> identifikator);
 }

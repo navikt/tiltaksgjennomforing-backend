@@ -73,7 +73,7 @@ public abstract class Avtalepart<T extends Identifikator> {
         godkjennForAvtalepart(avtale);
     }
 
-    void sjekkTilgang(Avtale avtale) {
+    public void sjekkTilgang(Avtale avtale) {
         if (!harTilgang(avtale)) {
             throw new TilgangskontrollException("Ikke tilgang til avtale");
         }
