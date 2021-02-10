@@ -25,23 +25,17 @@ public class VarselRepositoryTest {
     private VarselRepository varselRepository;
     @Autowired
     private AvtaleRepository avtaleRepository;
-    @Autowired
-    private VarslbarHendelseRepository varslbarHendelseRepository;
     private Avtale avtale;
-    private VarslbarHendelse varslbarHendelse;
 
     @Before
     public void setUp() {
         avtale = TestData.enArbeidstreningAvtale();
         avtaleRepository.save(avtale);
-        varslbarHendelse = TestData.enHendelse(avtale);
-        varslbarHendelseRepository.save(varslbarHendelse);
     }
 
     @Test
     public void save__lagrer_riktig() {
-        avtale = TestData.enArbeidstreningAvtale();
-        Varsel varsel = Varsel.nyttVarsel(TestData.enIdentifikator(), varslbarHendelse, true, avtale, Avtalerolle.DELTAKER, Avtalerolle.VEILEDER, varslbarHendelse.getVarslbarHendelseType(), varslbarHendelse.getAvtaleId());
+        Varsel varsel = Varsel.nyttVarsel(TestData.enIdentifikator(), true, avtale, Avtalerolle.DELTAKER, Avtalerolle.VEILEDER, VarslbarHendelseType.ENDRET, avtale.getId());
         Varsel lagretVarsel = varselRepository.save(varsel);
         assertThat(lagretVarsel).isEqualToIgnoringNullFields(varsel);
     }
