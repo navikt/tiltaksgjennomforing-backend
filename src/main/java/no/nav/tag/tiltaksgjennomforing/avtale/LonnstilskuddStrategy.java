@@ -115,7 +115,21 @@ public class LonnstilskuddStrategy extends BaseAvtaleInnholdStrategy {
     }
 
     @Override
-    public boolean erAltUtfylt() {
+    public boolean harArbeidsgiverFyltUtAlt() {
+        return super.erAltUtfylt() && erIkkeTomme(
+                avtaleInnhold.getArbeidsgiverKontonummer(),
+                avtaleInnhold.getStillingstittel(),
+                avtaleInnhold.getArbeidsoppgaver(),
+                avtaleInnhold.getManedslonn(),
+                avtaleInnhold.getFeriepengesats(),
+                avtaleInnhold.getArbeidsgiveravgift(),
+                avtaleInnhold.getHarFamilietilknytning(),
+                avtaleInnhold.getStillingstype()
+        ) && erFamiletilknytningForklaringFylltUtHvisDetTrengs();
+    }
+
+    @Override
+    public boolean harVeilederFyltUtAlt() {
         return super.erAltUtfylt() && erIkkeTomme(
                 avtaleInnhold.getArbeidsgiverKontonummer(),
                 avtaleInnhold.getStillingstittel(),
@@ -126,6 +140,11 @@ public class LonnstilskuddStrategy extends BaseAvtaleInnholdStrategy {
                 avtaleInnhold.getArbeidsgiveravgift(),
                 avtaleInnhold.getHarFamilietilknytning(),
                 avtaleInnhold.getStillingstype()
-        ) && erFamiletilknytningForklaringFylltUtHvisDetTrengs();
+        );
+    }
+
+    @Override
+    public boolean erAltUtfylt() {
+        return harArbeidsgiverFyltUtAlt() && harVeilederFyltUtAlt();
     }
 }

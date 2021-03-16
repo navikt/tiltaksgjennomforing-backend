@@ -55,6 +55,16 @@ public class BaseAvtaleInnholdStrategy implements AvtaleInnholdStrategy {
         );
     }
 
+    @Override
+    public boolean harVeilederFyltUtAlt() {
+        return erAltUtfylt();
+    }
+
+    @Override
+    public boolean harArbeidsgiverFyltUtAlt() {
+        return erAltUtfylt();
+    }
+
     protected void sjekkAtStartDatoErEtterSluttDato(LocalDate startDato, LocalDate sluttDato) {
         if (startDato != null && sluttDato != null) {
             if (startDato.isAfter(sluttDato)) {

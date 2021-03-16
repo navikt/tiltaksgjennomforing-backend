@@ -198,6 +198,7 @@ public class Avtale extends AbstractAggregateRoot<Avtale> {
     }
 
     void godkjennForArbeidsgiver(Identifikator utfortAv) {
+        gjeldendeInnhold().sjekkOmArbeidsgiverHarFyltUtAlt();
         sjekkOmAltErUtfylt();
         this.setGodkjentAvArbeidsgiver(LocalDateTime.now());
         sistEndretNå();
@@ -205,6 +206,7 @@ public class Avtale extends AbstractAggregateRoot<Avtale> {
     }
 
     void godkjennForVeileder(Identifikator utfortAv) {
+        gjeldendeInnhold().sjekkOmVeilederHarFyltUtAlt();
         sjekkOmAltErUtfylt();
         if (erUfordelt()) {
             throw new AvtaleErIkkeFordeltException();
@@ -220,6 +222,7 @@ public class Avtale extends AbstractAggregateRoot<Avtale> {
     }
 
     void godkjennForVeilederOgDeltaker(Identifikator utfortAv, GodkjentPaVegneGrunn paVegneAvGrunn) {
+        gjeldendeInnhold().sjekkOmVeilederHarFyltUtAlt();
         sjekkOmAltErUtfylt();
         if (erGodkjentAvDeltaker()) {
             throw new DeltakerHarGodkjentException();
@@ -245,7 +248,7 @@ public class Avtale extends AbstractAggregateRoot<Avtale> {
     }
 
     void sjekkOmAltErUtfylt() {
-        if (!erAltUtfylt()) {
+        if (!gjeldendeInnhold().erAltUtfylt()) {
             throw new AltMåVæreFyltUtException();
         }
     }
@@ -265,7 +268,7 @@ public class Avtale extends AbstractAggregateRoot<Avtale> {
             return Status.GJENNOMFØRES;
         } else if (erGodkjentAvVeileder()) {
             return Status.KLAR_FOR_OPPSTART;
-        } else if (erAltUtfylt()) {
+        } else if (gjeldendeInnhold().erAltUtfylt()) {
             return Status.MANGLER_GODKJENNING;
         } else {
             return Status.PÅBEGYNT;
@@ -314,10 +317,6 @@ public class Avtale extends AbstractAggregateRoot<Avtale> {
             sistEndretNå();
             registerEvent(new AvtaleGjenopprettet(this, veileder.getIdentifikator()));
         }
-    }
-
-    boolean erAltUtfylt() {
-        return gjeldendeInnhold().erAltUtfylt();
     }
 
     public void leggTilBedriftNavn(String bedriftNavn) {

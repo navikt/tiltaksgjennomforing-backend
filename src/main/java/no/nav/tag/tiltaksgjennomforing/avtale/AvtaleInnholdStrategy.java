@@ -9,4 +9,6 @@ public interface AvtaleInnholdStrategy {
     default void endreTilskuddsberegning(EndreTilskuddsberegning endreTilskuddsberegning) {
         throw new RuntimeException("Ikke implementert");
     }
+    boolean harVeilederFyltUtAlt();
+    boolean harArbeidsgiverFyltUtAlt();
 }

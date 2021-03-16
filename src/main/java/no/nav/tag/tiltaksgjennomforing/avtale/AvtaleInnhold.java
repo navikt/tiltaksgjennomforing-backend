@@ -3,6 +3,8 @@ package no.nav.tag.tiltaksgjennomforing.avtale;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
+import no.nav.tag.tiltaksgjennomforing.exceptions.Feilkode;
+import no.nav.tag.tiltaksgjennomforing.exceptions.FeilkodeException;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -166,6 +168,18 @@ public class AvtaleInnhold {
 
     public void endreTilskuddsberegning(EndreTilskuddsberegning tilskuddsberegning) {
         innholdStrategi().endreTilskuddsberegning(tilskuddsberegning);
+    }
+
+    public void sjekkOmVeilederHarFyltUtAlt() {
+        if (innholdStrategi().harVeilederFyltUtAlt() && !innholdStrategi().erAltUtfylt()) {
+            throw new FeilkodeException(Feilkode.VEILEDER_FYLT_UT_ALT_SITT);
+        }
+    }
+
+    public void sjekkOmArbeidsgiverHarFyltUtAlt() {
+        if (innholdStrategi().harArbeidsgiverFyltUtAlt() && !innholdStrategi().erAltUtfylt()) {
+            throw new FeilkodeException(Feilkode.ARBEIDSGIVER_FYLT_UT_ALT_SITT);
+        }
     }
 }
 
